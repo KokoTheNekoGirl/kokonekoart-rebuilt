@@ -139,11 +139,11 @@ p {
     animation: anim-btn 0.7s linear infinite alternate-reverse;
 }
 
-.pink.locked {
+.locked:not(.blue) {
     background: url("../img/disbaled-1.png") no-repeat;
 }
 
-.blue.locked {
+.locked.blue {
     background: url("../img/disbaled-2.png") no-repeat;
 }
 
