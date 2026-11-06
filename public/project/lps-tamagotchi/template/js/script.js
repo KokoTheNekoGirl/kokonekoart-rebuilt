@@ -1,11 +1,11 @@
 //Variables
 //sounds
-var music = new Audio("./template/sfx/music.mp3");
-var sound = new Audio("./template/sfx/button.wav");
-var clicked = new Audio("./template/sfx/clicked.wav");
-var success = new Audio("./template/sfx/squeak.wav");
-var error = new Audio("./template/sfx/error.wav");
-var complete = new Audio("./template/sfx/complete.wav");
+var music = new Audio("/project/lps-tamagotchi/template/sfx/music.mp3");
+var sound = new Audio("/project/lps-tamagotchi/template/sfx/button.wav");
+var clicked = new Audio("/project/lps-tamagotchi/template/sfx/clicked.wav");
+var success = new Audio("/project/lps-tamagotchi/template/sfx/squeak.wav");
+var error = new Audio("/project/lps-tamagotchi/template/sfx/error.wav");
+var complete = new Audio("/project/lps-tamagotchi/template/sfx/complete.wav");
 //buttons
 var feed = document.querySelector(".feed");
 var pet = document.querySelector(".pet");
