@@ -45,7 +45,7 @@ slides:
         alt: "Screenshot of the game from the start. Bunny awaits attention"
 
 links:
-  github: https://github.com/KokoTheNekoGirl/kokonekoart-rebuilt/tree/main/public/projects/lps-tamagotchi
+  github: https://github.com/KokoTheNekoGirl/kokonekoart-rebuilt/tree/prod/public/project/lps-tamagotchi
   live: lps-tamagotchi
 
 finalNote: Not viewed well on mobile.

@@ -49,7 +49,7 @@ slides:
         alt: The before and after of the site's voice. Before, it was more paper/crafty stop motion animation, whereas now it's dreamy, soft, pastel aesthetic.
 
 links:
-  github: https://github.com/KokoTheNekoGirl/kokonekoart-rebuilt/tree/main/public/projects/kokonekoart
+  github: https://github.com/KokoTheNekoGirl/kokonekoart-rebuilt/tree/prod/public/project/kokonekoart
   live: kokonekoart
   figma:
     url: https://www.figma.com/design/9N3tfxZAtix6mRPAeQ9rn4/Commission-Site

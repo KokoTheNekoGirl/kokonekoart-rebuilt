@@ -1,6 +1,6 @@
 var signAnimation = bodymovin.loadAnimation({
     container: document.querySelector('#signAnimation'), // Required
-    path: 'js/json/asset1-data.json', // Required
+    path: '/project/kokonekoart/js/json/asset1-data.json', // Required
     renderer: 'svg', // Required
     loop: true, // Optional
     autoplay: true, // Optional
@@ -10,7 +10,7 @@ var signAnimation = bodymovin.loadAnimation({
 })
 var phoneAnimation = bodymovin.loadAnimation({
     container: document.querySelector('#phoneAnimation'), // Required
-    path: 'js/json/asset2-data.json', // Required
+    path: '/project/kokonekoart/js/json/asset2-data.json', // Required
     renderer: 'svg', // Required
     loop: true, // Optional
     autoplay: true, // Optional
