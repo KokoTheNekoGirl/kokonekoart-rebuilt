@@ -1,0 +1,220 @@
+// Portfolio piece presentation. Sits inside .info-viewport (the pink box).
+
+// StarBorn is optional: if --font-starborn isn't registered the heading font is used.
+.presentation {
+    --slide-gap: 1.5em 3em;
+    margin: 1.5em auto;
+    // .info-viewport:not(.img-only) caps .swiper-wrapper at 300px; this box needs the full width.
+    &.info-viewport:not(.img-only) {
+        padding: 3em 2em 2em;
+        text-align: left;
+        .swiper-wrapper {
+            max-width: none;
+            margin: 0;
+        }
+    }
+
+    .swiper {
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .slide {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto 1fr;
+        grid-template-areas:
+            'media title'
+            'media body';
+        gap: var(--slide-gap);
+        align-content: center;
+        min-height: 26rem;
+        padding: 0.5em 1em;
+        box-sizing: border-box;
+        text-align: left;
+
+        &.slide-flip-b {
+            grid-template-areas:
+                'title media'
+                'body media';
+        }
+    }
+
+    // No image: one centred column instead of an empty half.
+    .slide.slide-no-media {
+        grid-template-columns: minmax(0, 1fr);
+        grid-template-rows: auto;
+        grid-template-areas:
+            'title'
+            'body';
+        .slide-title { align-self: center; text-align: center;}
+    }
+
+    .slide-title { grid-area: title; align-self: end; }
+    .slide-media { grid-area: media; align-self: center; }
+    .slide-body  { grid-area: body; align-self: start; }
+
+    .slide-heading {
+        font-family: var(--font-starborn, var(--font-face-heading));
+        font-weight: normal;
+        margin: 0;
+        text-align: inherit;
+        line-height: 1.1;
+    }
+    h1.slide-heading { font-size: var(--font-size-xl, 2.5rem); margin-bottom: 0.5em; color:rgb(var(--off-black)); }
+    h2.slide-heading { font-size: var(--font-size-lg, 2rem); margin-bottom: 0; color:rgb(var(--off-black)); }
+
+    .slide-date { margin: 0.25em 0 0; }
+    .slide-heading:focus { outline: none; }
+    .slide-labels {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+        margin-top: 0.75em;
+    }
+    .slide-text > :first-child { margin-top: 0; }
+    .slide-text > :last-child { margin-bottom: 0; }
+    .slide-note {
+        font-style: italic;
+        margin: 0 0 1em;
+    }
+
+    .slide-body > .btn { margin-top: 2em; }
+
+    // The site reset strips list styling; restore it for slide content.
+    .slide-text {
+        ul,ol {
+            padding: 0 1em;
+            li {
+                line-height: 1.6;
+                letter-spacing: 2%;
+                margin-bottom: 0.5em;
+                &:before {
+                    content:"\f1b0";
+                    font-family: var(--font-awesome);
+                    font-weight: 900;
+                    margin-right: 0.25em;
+                    color: rgb(var(--primary));
+                }
+            }
+        }
+        ol { list-style: decimal; }
+        li { margin-bottom: 0.5em; line-height: 1.4; }
+        p { margin: 0 0 1em; }
+        p, li { text-wrap: wrap; }
+    }
+
+    .slide-media img {
+        display: block;
+        width: 100%;
+        height: auto;
+        border-radius: 1.5em;
+        box-shadow: 0 5px 20px rgba(var(--black), 0.25);
+    }
+
+    // Several images: a grid. With an odd count the first one spans the row.
+    .images {
+        display: grid;
+        gap: 0.75em;
+        &.images-2,
+        &.images-3,
+        &.images-4 {
+            grid-template-columns: 1fr 1fr;
+        }
+        &.images-3 img:first-child { grid-column: 1 / -1; }
+    }
+
+    // Final Result: centred, single column.
+    .slide-final {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1em;
+        text-align: center;
+        .slide-heading:focus { outline: none; }
+        .slide-text {
+            max-width: 800px;
+            margin:0 auto;
+        }
+        .slide-links {
+            display: flex;
+            margin: 0;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2.2em;
+            padding: 0;
+        }
+    }
+
+    // Prev / next circles, centred at the bottom of the box.
+    .presentation-nav {
+        display: flex;
+        justify-content: center;
+        gap: 1.5em;
+        margin-top: 1.5em;
+        &[hidden] { display: none; }
+    }
+    .pres-btn {
+        display: grid;
+        place-items: center;
+        width: 3rem;
+        height: 3rem;
+        padding: 0;
+        border: 2px solid rgb(var(--primary));
+        border-radius: 50%;
+        background: rgba(var(--white), 0.7);
+        color: rgb(var(--primary));
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: background 0.3s, color 0.3s, opacity 0.3s;
+
+        &:hover:not(:disabled) {
+            background: rgb(var(--primary));
+            color: rgb(var(--white));
+        }
+        &:focus-visible {
+            outline: 3px solid rgb(var(--primary));
+            outline-offset: 3px;
+        }
+        &:disabled,
+        &.is-disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+    }
+}
+
+.presentation-back {
+    display: flex;
+    justify-content: center;
+    padding: 2em 0 6em;
+}
+
+// Phones / tablets: Title, Image, Content.
+@media (max-width: 1000px) {
+    .presentation {
+        &.info-viewport:not(.img-only) { padding: 2em 1em 1.5em; }
+        .slide,
+        .slide.slide-flip-b {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            grid-template-areas:
+                'title'
+                'media'
+                'body';
+            min-height: 0;
+            padding: 0.5em 0;
+        }
+        .slide-labels {
+            justify-content: center;
+        }
+        .slide-title { align-self: start; text-align: center; }
+        .slide-body { text-align: left; }
+        .slide-body > .btn { display: flex; width: fit-content; margin-inline: auto; }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .presentation .pres-btn { transition: none; }
+}

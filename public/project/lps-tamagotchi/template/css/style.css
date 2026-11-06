@@ -1,0 +1,193 @@
+/*CSS RESET*/
+* {
+    margin:0;
+    padding:0;
+}
+
+/*background setting*/
+
+body {
+    background: url("../img/background.png") no-repeat;;
+    cursor: url('../img/Normal.cur'),auto;
+}
+
+.wait {
+    cursor: url('../img/Busy.ani');
+}
+
+.container {
+    background: url("../img/wallpaper.png") no-repeat;
+    width:100%;
+    background-position: center center;
+    max-width: 1200px;
+    height: 600px;
+    margin: auto;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}
+
+.game{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/*Bunny Object*/
+
+.bunny{
+    height: 500px;
+    width: 500px;
+}
+
+.idle{
+    background: url("../img/idle.gif") no-repeat;
+    background-size: 500px;
+}
+
+.pet-success {
+    background: url("../img/pet-success.gif") no-repeat;
+    background-size: 500px;
+}
+
+.feed-success {
+    background: url("../img/feed-success.gif") no-repeat;
+    background-size: 500px;
+}
+
+/*Buttons!!!*/
+
+
+.btn-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap:1em;
+}
+
+.btn {
+    cursor: url('../img/Pointer.cur'),auto;
+    background: url("../img/button-1.png") no-repeat;
+    background-size: 100px;
+    height: 50px;
+    width: 100px;
+    border-radius: 20px;
+    border: none;
+    margin: 2px;
+    padding: 5px;
+    text-align: center;
+    transition: 0.3s;
+    color:#ffffff;
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 20px;
+}
+
+p {
+    color:#ffffff;
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 18px;
+}
+
+.enabled:hover {
+    transform: scale(1.2);
+}
+
+.blue {
+    background: url("../img/button-2.png") no-repeat;
+    background-size: 100px;
+}
+
+.loading-bar {
+    display: none;
+    position: relative;
+    background: url("../img/loading-bar-empty.png") no-repeat;
+    background-size: 200px;
+    color: #3f0b25;
+    width: 100%;
+    height: 50px;
+    width: 200px;
+    border-radius: 20px;
+    border: none;
+    transition: 0.3s;
+    text-align: center;
+    font-family: 'Gloria Hallelujah', cursive;
+    font-size: 20px;
+    margin: 2px;
+    overflow: hidden;
+}
+.loading-bar span{
+    z-index: 1;
+    position: relative;
+}
+.loading-bar-load{
+    position: absolute;
+    transition: .5s linear;
+    background: url("../img/loading-bar.png") no-repeat;
+    background-size: 200px;
+    height: 50px;
+    width: 0%;
+    top:0;
+    left:0;
+}
+
+.reset {
+    display: none;
+    font-size: 20px;
+    line-height:92%;
+    animation: anim-btn 0.7s linear infinite alternate-reverse;
+}
+
+.pink.locked {
+    background: url("../img/disbaled-1.png") no-repeat;
+}
+
+.blue.locked {
+    background: url("../img/disbaled-2.png") no-repeat;
+}
+
+/*Objects*/
+
+.hand {
+    height: 100px;
+    width: 100px;
+    background: url("../img/hand-ready.gif") no-repeat;
+    background-size: 100px;
+    margin-top: 100px;
+    align-self: normal;
+    opacity: 0;
+}
+
+.food {
+    height: 200px;
+    width: 200px;
+}
+
+.empty {
+    background: url("../img/food-empty.png") no-repeat;
+    background-size: 200px;
+}
+
+.filling {
+    background: url("../img/food-filling.gif") no-repeat;
+    background-size: 200px;
+}
+
+.filled {
+    background: url("../img/food-filled.png") no-repeat;
+    background-size: 200px;
+}
+
+.heart {
+    display: none;
+    position: absolute;
+    height: 50px;
+    top: 25%;
+}
+
+/*Animations*/
+
+@keyframes anim-btn {
+    to {transform: scale(1.2);}
+}

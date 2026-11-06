@@ -1,0 +1,15 @@
+---
+import type { PortfolioEntry } from '@utils/portfolio';
+import PortfolioCard from './PortfolioCard.astro';
+
+interface Props {
+  pieces: PortfolioEntry[];
+}
+
+const { pieces } = Astro.props;
+---
+
+<div class="portfolio-posts">
+  {pieces.map((piece, i) => <PortfolioCard piece={piece} eager={i === 0} />)}
+  {pieces.length === 0 && <p class="center">Nothing here yet. Check back soon!</p>}
+</div>

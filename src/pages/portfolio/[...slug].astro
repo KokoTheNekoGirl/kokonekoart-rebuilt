@@ -1,6 +1,9 @@
 ---
-import { PortfolioPiece } from '@layouts';
-import { type CollectionEntry, getCollection, render } from 'astro:content';
+import { getCollection, render } from 'astro:content';
+import { Layout } from '@layouts';
+import { PortfolioPresentation } from '@components';
+import { isoDate } from '@utils/last-modified';
+import { pieceHref, type PortfolioEntry } from '@utils/portfolio';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('portfolio');
@@ -9,12 +12,29 @@ export async function getStaticPaths() {
 		props: post,
 	}));
 }
-type Props = CollectionEntry<'portfolio'>;
 
-const post = Astro.props;
+const post = Astro.props as PortfolioEntry;
+const { title, description, completed } = post.data;
+// Text under the frontmatter becomes the first slide's custom text.
+const hasIntro = Boolean(post.body?.trim().replace(/<!--[\s\S]*?-->/g, '').trim());
 const { Content } = await render(post);
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'CreativeWork',
+	name: title,
+	description,
+	dateCreated: isoDate(completed, 'UTC'),
+	url: new URL(pieceHref(post), Astro.site).href,
+	author: { '@type': 'Person', name: 'Koko' },
+};
 ---
 
-<PortfolioPiece {...post.data}>
-	<Content />
-</PortfolioPiece>
+<Layout title={title} description={description}>
+	<article class="page" itemscope itemtype="https://schema.org/CreativeWork">
+		<PortfolioPresentation piece={post}>
+			{hasIntro && <Content />}
+		</PortfolioPresentation>
+	</article>
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>

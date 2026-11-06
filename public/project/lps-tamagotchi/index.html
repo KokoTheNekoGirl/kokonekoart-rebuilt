@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+    <!--DO NOT REMOVE-->
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LPS Tomogatchi</title>
+    <link rel="stylesheet" href="template/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&display=swap" rel="stylesheet"> 
+    <link rel="icon" type="image/png" href="template/img/logo.png" sizes="16x16">
+</head>
+<body>
+    <div class="container">
+         <!--Food Object-->
+        <div class="food empty" alt="pet food bowl"></div>
+        <div class="game">
+             <!-- Heart Object -->
+              <img class="heart" src="./template/img/complete.gif">
+             <!--Bunny Object-->
+            <div class="idle bunny" alt="LPS style bunny">
+            </div>
+             <!--!!BUTTONS!!-->
+            <div class="btn-box">
+                 <!-- Game Message -->
+                <p class="game-message" role="status" hidden></p>
+                 <!--Loading bar-->
+                <div class="loading-bar"><div class="loading-bar-load"></div><span>Loading...</span></div>
+                 <!--Feed + Pet Buttons (script.js makes one of them blue at random for A/B testing)-->
+                <button class="btn enabled feed" onmouseover="btnSound(this);" onclick="interact(this,1);">Feed</button>
+                <button class="btn enabled pet" onmouseover="btnSound(this);" onclick="interact(this,2);">Pet</button>
+                 <!--Reset Button-->
+                <div class="btn reset" onclick="resetGame();"></div>
+            </div>
+        </div>
+         <!--Hand Object-->
+        <div class="hand" alt="cartoon hand"></div>
+    </div>
+        <!--Sourcing script-->
+        <script src="template/js/script.js"></script>
+</body>
+</html>

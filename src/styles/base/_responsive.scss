@@ -90,7 +90,7 @@
     .portfolio-piece {
 		grid-template-columns:1fr;
 	}
-	.entry-summary:nth-child(even) .mini-box{
+	.portfolio-summary:nth-child(even) .mini-box{
 	    order:unset;
     }
 }

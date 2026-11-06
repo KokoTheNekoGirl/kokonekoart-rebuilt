@@ -20,7 +20,8 @@
       "@data/*": ["./src/data/*"],
       "@layouts": ["./src/layouts/index.ts"],
       "@layouts/*": ["./src/layouts/*"],
-      "@utils/*": ["./src/utils/*"]
+      "@utils/*": ["./src/utils/*"],
+      "@portfolio/*": ["./src/assets/portfolio/*"]
     }
   }
 }

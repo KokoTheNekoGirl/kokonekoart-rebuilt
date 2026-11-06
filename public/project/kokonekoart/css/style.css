@@ -1,0 +1,725 @@
+/* CSS RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Fuzzy Bubbles";
+  background: url("/project/kokonekoart/img/paper-texture.jpg");
+  color: #222222;
+}
+
+a {
+  color: #A473C4;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.fp-viewing-Home .site-branding svg {
+  fill: #A473C4;
+}
+
+.fp-viewing-Prices .site-branding svg {
+  fill: #618AF9;
+}
+
+.fp-viewing-Gallery .site-branding svg {
+  fill: #E08DAF;
+}
+
+.fp-viewing-Contact .site-branding svg {
+  fill: #FF855F;
+}
+
+#fp-nav li:nth-child(1):hover span:last-child, #fp-nav li:nth-child(1) .active span:last-child {
+  background: #A473C4;
+}
+#fp-nav li:nth-child(1) span:last-child {
+  background: linear-gradient(rgba(0, 0, 0, 0.1176470588), rgba(0, 0, 0, 0.1176470588)), #A473C4;
+}
+#fp-nav li:nth-child(2):hover span:last-child, #fp-nav li:nth-child(2) .active span:last-child {
+  background: #618AF9;
+}
+#fp-nav li:nth-child(2) span:last-child {
+  background: linear-gradient(rgba(0, 0, 0, 0.1176470588), rgba(0, 0, 0, 0.1176470588)), #618AF9;
+}
+#fp-nav li:nth-child(3):hover span:last-child, #fp-nav li:nth-child(3) .active span:last-child {
+  background: #E08DAF;
+}
+#fp-nav li:nth-child(3) span:last-child {
+  background: linear-gradient(rgba(0, 0, 0, 0.1176470588), rgba(0, 0, 0, 0.1176470588)), #E08DAF;
+}
+#fp-nav li:nth-child(4):hover span:last-child, #fp-nav li:nth-child(4) .active span:last-child {
+  background: #FF855F;
+}
+#fp-nav li:nth-child(4) span:last-child {
+  background: linear-gradient(rgba(0, 0, 0, 0.1176470588), rgba(0, 0, 0, 0.1176470588)), #FF855F;
+}
+
+#site-header {
+  position: fixed;
+  width: 100%;
+  justify-content: space-between;
+  z-index: 2;
+  display: flex;
+  isolation: isolate;
+  align-items: center;
+  height: 200px;
+}
+#site-header .site-branding {
+  display: flex;
+  align-items: center;
+}
+#site-header .site-branding .logo {
+  transition: 0.5s;
+  cursor: pointer;
+  height: 150px;
+  width: 150px;
+  margin: 1em;
+}
+#site-header a {
+  text-decoration: none;
+  display: block;
+  color: #222222;
+  letter-spacing: 1px;
+}
+#site-header .menu {
+  display: flex;
+  font-size: 1.2rem;
+}
+#site-header .menu div {
+  cursor: pointer;
+  margin: 1em;
+}
+
+.site-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 5em;
+}
+.site-footer i {
+  font-size: 2rem;
+}
+.site-footer a {
+  color: #222222;
+}
+
+.tos-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: left;
+  padding: 25em;
+  height: 100vh;
+}
+.tos-section .tos-rules {
+  margin-bottom: 2em;
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  height: 100%;
+}
+
+.home-container {
+  display: flex;
+  justify-content: center;
+}
+
+.prices-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+.contact-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contact-container .phone-anim {
+  margin-right: 3em;
+}
+.contact-container .contact-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.contact-container .contact-info p, .contact-container .contact-info a {
+  margin-bottom: 1em;
+}
+.contact-container .contact-info .kofi-btn {
+  cursor: pointer;
+  margin-top: 2em;
+}
+.contact-container .contact-info .media-icons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.contact-container .contact-info .media-icons a {
+  text-decoration: none;
+}
+.contact-container .contact-info .media-icons .social-icon {
+  cursor: pointer;
+  border-radius: 1000px;
+  height: 52px;
+  width: 52px;
+  padding: 0.2em;
+  font-size: 2em;
+  margin-right: 0.2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #222222;
+}
+.contact-container .contact-info .media-icons .social-icon i {
+  color: #fff;
+}
+.contact-container .contact-info .media-icons .icon-img {
+  cursor: pointer;
+  display: flex;
+  height: 52px;
+  width: 52px;
+  font-size: 52px;
+  border-radius: 1000px;
+  margin-right: 0.2em;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+.contact-container .contact-info .media-icons .icon-img img {
+  height: 52px;
+  width: 52px;
+}
+.contact-container .contact-info .media-icons .social-icon-inverse {
+  cursor: pointer;
+  display: flex;
+  height: -moz-fit-content;
+  height: fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 52px;
+  border-radius: 1000px;
+  margin-right: 0.2em;
+  align-items: center;
+  justify-content: center;
+  background-color: #fff;
+}
+.contact-container .contact-info .media-icons .social-icon-inverse i {
+  color: #222222;
+}
+
+.home-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  gap: 1em;
+  height: -moz-fit-content;
+  height: fit-content;
+  margin: auto 0;
+}
+
+.anim-container {
+  position: relative;
+}
+.anim-container .sign-text {
+  position: absolute;
+  bottom: 130px;
+  left: 240px;
+  font-size: 3rem;
+  z-index: 2;
+}
+
+.anim-box {
+  box-shadow: 10px 12px 50px 2px rgba(0, 0, 0, 0.5) inset;
+  height: 600px;
+  width: 600px;
+  background: url("/project/kokonekoart/img/wood-painted-bg.jpg");
+  background-size: contain;
+  margin-left: 5em;
+}
+
+#sample-img {
+  width: 400px;
+  margin-right: 5em;
+  position: relative;
+}
+#sample-img #sample-art {
+  position: absolute;
+  z-index: 2;
+  height: 594px;
+  width: 400px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  top: 0;
+  left: 0;
+  transition: 0.5s;
+}
+
+.trans path {
+  fill: #F7DCBF;
+}
+
+.bg-color path {
+  fill: #98DAFF;
+}
+
+.pattern path {
+  fill: url(#pattern-bg);
+}
+
+.scene .headshot-bg path {
+  fill: #73A2FF;
+}
+.scene .halfbody-bg path, .scene .fullbody-bg path {
+  fill: #349F38;
+}
+
+.HS .sketch {
+  background-image: url("/project/kokonekoart/img/HS-Sketch-Transparent.png");
+}
+.HS .lines {
+  background-image: url("/project/kokonekoart/img/HS-Lines-Transparent.png");
+}
+.HS .color {
+  background-image: url("/project/kokonekoart/img/HS-Color-Transparent.png");
+}
+.HS .shaded {
+  background-image: url("/project/kokonekoart/img/HS-Shaded-Transparent.png");
+}
+.HS .halfbody-bg {
+  transform: rotateX(90deg);
+}
+.HS .fullbody-bg {
+  transform: rotateX(90deg);
+}
+
+.HB .sketch {
+  background-image: url("/project/kokonekoart/img/HB-Sketch-Transparent.png");
+}
+.HB .lines {
+  background-image: url("/project/kokonekoart/img/HB-Lines-Transparent.png");
+}
+.HB .color {
+  background-image: url("/project/kokonekoart/img/HB-Color-Transparent.png");
+}
+.HB .shaded {
+  background-image: url("/project/kokonekoart/img/HB-Shaded-Transparent.png");
+}
+.HB .fullbody-bg {
+  transform: rotateX(90deg);
+}
+
+.FB .sketch {
+  background-image: url("/project/kokonekoart/img/FB-Sketch-Transparent.png");
+}
+.FB .lines {
+  background-image: url("/project/kokonekoart/img/FB-Lines-Transparent.png");
+}
+.FB .color {
+  background-image: url("/project/kokonekoart/img/FB-Color-Transparent.png");
+}
+.FB .shaded {
+  background-image: url("/project/kokonekoart/img/FB-Shaded-Transparent.png");
+}
+
+.chibi .sketch {
+  background-image: url("/project/kokonekoart/img/Chibi-Sketch-Transparent.png");
+}
+.chibi .lines {
+  background-image: url("/project/kokonekoart/img/Chibi-Lineart-Transparent.png");
+}
+.chibi .color {
+  background-image: url("/project/kokonekoart/img/Chibi-Color-Transparent.png");
+}
+.chibi .shaded {
+  background-image: url("/project/kokonekoart/img/Chibi-Shaded-Transparent.png");
+}
+.chibi #sample-bg {
+  transform: rotateY(180deg);
+}
+
+.comms-btns .char-btns, .comms-btns .art-btns, .comms-btns .bg-btns {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 1em 0.2em;
+}
+.comms-btns .custom-btn {
+  cursor: pointer;
+}
+.comms-btns .char-btns .selected .btn-bg {
+  fill: #98DAFF;
+  stroke: #fff;
+}
+.comms-btns .art-btns .selected .btn-bg {
+  fill: #FFB876;
+  stroke: #fff;
+}
+.comms-btns .bg-btns .selected .btn-bg {
+  fill: #E9C7FF;
+  stroke: #fff;
+}
+.comms-btns .custom-btn:hover {
+  filter: brightness(0.8);
+}
+.comms-btns .selected:hover {
+  filter: brightness(1);
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+  margin-bottom: 2em;
+  max-width: 450px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+.page-header h2 {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 2.5rem;
+  padding: 1em 0.5em;
+}
+
+.home .page-header {
+  background-image: url("/project/kokonekoart/img/home.svg");
+}
+
+.prices .page-header {
+  background-image: url("/project/kokonekoart/img/price.svg");
+}
+
+.s3 .page-header {
+  background-image: url("/project/kokonekoart/img/gallery.svg");
+}
+
+.s4 .page-header {
+  background-image: url("/project/kokonekoart/img/contact.svg");
+}
+
+.price-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  background: url("/project/kokonekoart/img/price.svg") no-repeat;
+  background-size: 100% 100%;
+}
+.price-tag p {
+  width: -moz-fit-content;
+  width: fit-content;
+  font-size: 2rem;
+  padding: 1em 2.5em;
+}
+
+.sample-gallery {
+  background: #fff;
+  padding: 1em;
+  margin: 0 auto;
+  width: -moz-fit-content;
+  width: fit-content;
+  height: 650px;
+  overflow-y: scroll;
+}
+.sample-gallery img {
+  gap: 1em;
+  height: 250px;
+  width: 250px;
+}
+
+.animatable g, .animatable path {
+  transform-origin: center;
+  transform-box: fill-box;
+  will-change: transform, scale;
+}
+
+#star-1 {
+  animation: twinkle 0.4s alternate infinite steps(3);
+}
+
+#star-2 {
+  animation: twinkle 0.3s alternate infinite steps(3);
+}
+
+#first-star {
+  position: absolute;
+  scale: 0.5;
+  top: -40%;
+  left: -20%;
+}
+
+#second-star {
+  position: absolute;
+  scale: 0.3;
+  bottom: -40%;
+  right: -20%;
+}
+
+.fold-forward {
+  animation: turnPage 0.5s;
+}
+
+.fold-backward {
+  animation: turnPage 0.5s reverse;
+}
+
+.flip-forward {
+  animation: pageFlip 1s linear;
+}
+
+.flip-backward {
+  animation: pageFlip 1s reverse linear;
+}
+
+@keyframes twinkle {
+  0% {
+    transform: scale(0.5);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 100;
+  }
+}
+@keyframes pageFlip {
+  0% {
+    transform: rotateY(0deg);
+  }
+  100% {
+    transform: rotateY(180deg);
+  }
+}
+@keyframes turnPage {
+  0% {
+    transform: rotateX(90deg);
+    transform-origin: top center;
+  }
+  100% {
+    transform: rotateX(0deg);
+    transform-origin: top center;
+  }
+}
+
+/* ------------------------------------------------------------------
+   MOBILE / TABLET (max-width: 1000px)
+   Keep in sync with `responsiveWidth` in js/script.js: below this width
+   fullPage.js switches to normal scrolling and these styles take over.
+   ------------------------------------------------------------------ */
+@media (max-width: 1000px) {
+  #fp-nav {
+    display: none;
+  }
+  /* Header: stacks (logo + wordmark, then menu) and scrolls with the page */
+  #site-header {
+    position: relative;
+    flex-direction: column;
+    height: auto;
+    padding: 0.5em 1em 0;
+  }
+  #site-header > a {
+    width: 100%;
+  }
+  #site-header .site-branding {
+    gap: 0.5em;
+  }
+  #site-header .site-branding .logo {
+    height: 72px;
+    width: 72px;
+    margin: 0.5em 0;
+    flex-shrink: 0;
+  }
+  #site-header .site-branding svg:not(.logo) {
+    flex: 1;
+    min-width: 0;
+    max-width: 446px;
+    width: 100%;
+    height: auto;
+  }
+  #site-header .menu {
+    width: 100%;
+    justify-content: center;
+    flex-wrap: wrap;
+    font-size: 1.1rem;
+  }
+  #site-header .menu div {
+    margin: 0.4em 0.8em;
+  }
+  /* Sections: natural height instead of one screen each, stacked content */
+  .section {
+    height: auto;
+    padding: 1.5em 1em 2.5em;
+    overflow-x: clip;
+  }
+  .home-container,
+  .prices-container,
+  .contact-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5em;
+    width: 100%;
+  }
+  .page-header {
+    margin-bottom: 1em;
+  }
+  .page-header h2 {
+    font-size: 1.9rem;
+    padding: 0.9em 1em;
+  }
+  /* Home */
+  .home-header {
+    align-items: center;
+    text-align: center;
+  }
+  .home-header h3 {
+    font-size: 1.1rem;
+  }
+  /* Decorative stars: shrunk and parked in the margins so they don't sit on the text */
+  .home-header {
+    margin-bottom: 1.5em;
+  }
+  #first-star {
+    top: -78px;
+    left: 4px;
+    scale: 0.3;
+  }
+  #second-star {
+    bottom: -102px;
+    right: 4px;
+    scale: 0.3;
+  }
+  .anim-container {
+    width: min(100%, 420px);
+    margin: 0 auto;
+  }
+  .anim-container .anim-box {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    margin: 0;
+  }
+  .anim-container {
+    /* positions were px on a 600px box; as % they scale with it */
+  }
+  .anim-container .sign-text {
+    bottom: 21.7%;
+    left: 26.7%;
+    font-size: clamp(1.6rem, 9vw, 3rem);
+  }
+  /* Prices */
+  #sample-img {
+    width: min(72vw, 360px);
+    margin: 0 auto;
+  }
+  #sample-img #sample-art {
+    width: 100%;
+    height: 100%;
+  }
+  .comms-btns {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  .comms-btns .char-btns,
+  .comms-btns .art-btns,
+  .comms-btns .bg-btns {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4em 0.2em;
+    margin: 0.75em 0;
+  }
+  .comms-btns .custom-btn svg {
+    height: 44px;
+    width: auto;
+    max-width: 100%;
+  }
+  .price-tag {
+    margin: 1em auto 0;
+  }
+  /* Gallery: two columns, page scrolls instead of a scroll box inside the page */
+  .gallery-container {
+    width: 100%;
+  }
+  .sample-gallery {
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    padding: 0.5em;
+  }
+  .sample-gallery .gallery-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5em;
+    margin-bottom: 0.5em;
+  }
+  .sample-gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+  }
+  /* Contact */
+  .contact-container .phone-anim {
+    width: min(100%, 340px);
+    height: auto;
+    aspect-ratio: 1/1;
+    margin: 0 auto;
+  }
+  .contact-info {
+    width: 100%;
+    text-align: center;
+  }
+  .contact-info .media-icons {
+    flex-wrap: wrap;
+    gap: 0.4em;
+  }
+  .site-footer {
+    margin-top: 2em;
+    gap: 1em;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  /* TOS page */
+  .tos-section {
+    padding: 1.5em 1.25em 2.5em;
+    height: auto;
+  }
+}
+/* Small phones */
+@media (max-width: 480px) {
+  body {
+    font-size: 0.95rem;
+  }
+  .page-header h2 {
+    font-size: 1.5rem;
+  }
+}
+/*# sourceMappingURL=style.css.map */

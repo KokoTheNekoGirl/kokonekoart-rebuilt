@@ -1,0 +1,62 @@
+---
+import { Image } from 'astro:assets';
+import Placeholder from '@assets/portfolio/portfolio-placeholder.jpg';
+import { CATEGORIES, categoryPath } from '@data/portfolio-categories';
+import { pieceHref, type PortfolioEntry } from '@utils/portfolio';
+// Sibling import, not from the '@components' barrel: avoids a circular import.
+import ButtonLink from './ButtonLink.astro';
+
+interface Props {
+  piece: PortfolioEntry;
+  eager?: boolean;
+}
+
+const { piece, eager = false } = Astro.props;
+const { title, description, categories, heroImage, heroAlt } = piece.data;
+const href = pieceHref(piece);
+const headingId = `piece-${piece.id}`;
+---
+
+<div class="portfolio-summary">
+  <section class="portfolio-piece" aria-labelledby={headingId}>
+    <div class="featured-image animate__animated animate__fadeInUp">
+      <a href={href} tabindex="-1" aria-hidden="true">
+        <Image
+          src={heroImage ?? Placeholder}
+          alt={heroAlt ?? `${title} preview`}
+          widths={[480, 720, 1080]}
+          sizes="(max-width: 1000px) 100vw, 400px"
+          loading={eager ? 'eager' : 'lazy'}
+          fetchpriority={eager ? 'high' : undefined}
+        />
+      </a>
+    </div>
+    <div class="mini-box animate__animated animate__fadeInUp">
+      <h3 id={headingId}>{title}</h3>
+      {
+        categories.length > 0 && (
+          <div class="portfolio-labels" role="group" aria-label="Categories">
+            {categories.map((id) => (
+              <ButtonLink
+                class="portfolio"
+                href={categoryPath(id)}
+                style={`background:${CATEGORIES[id].color}; color:#000000`}
+              >
+                {CATEGORIES[id].label}
+              </ButtonLink>
+            ))}
+          </div>
+        )
+      }
+      <p>{description}</p>
+      <ButtonLink
+        class="primary"
+        href={href}
+        aria-label={`Read more about ${title}`}
+        style="margin-top:1.5em;"
+      >
+        Read More
+      </ButtonLink>
+    </div>
+  </section>
+</div>

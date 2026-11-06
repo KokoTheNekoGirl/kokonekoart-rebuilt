@@ -1,0 +1,250 @@
+---
+import { Image } from 'astro:assets';
+import { CATEGORIES, categoryPath } from '@data/portfolio-categories';
+import { COLLEGE_NOTE, getFinalLinks, isCollegeProject, type PortfolioEntry } from '@utils/portfolio';
+import { renderMarkdown } from '@utils/markdown';
+import { formatDate, isoDate } from '@utils/last-modified';
+// Sibling import, not from the '@components' barrel: avoids a circular import.
+import ButtonLink from './ButtonLink.astro';
+
+interface Props {
+  piece: PortfolioEntry;
+}
+
+const { piece } = Astro.props;
+const { title, heroImage, heroAlt, completed, categories, slides, links, finalNote, finalText } = piece.data;
+
+// Dates are typed by hand as YYYY-MM-DD (UTC midnight), so format them in UTC.
+const completedText = formatDate(completed, 'UTC');
+const completedIso = isoDate(completed, 'UTC');
+const college = isCollegeProject(completed);
+const finalLinks = getFinalLinks(links);
+const note = finalNote?.replace(/^\s*note:\s*/i, '').trim();
+const hasIntro = Astro.slots.has('default');
+
+// Slide order: title slide, your custom slides, then Final Result.
+const total = slides.length + 2;
+const label = (n: number) => `Slide ${n} of ${total}`;
+---
+
+<section class="presentation info-viewport animate__animated animate__fadeIn" aria-roledescription="carousel" aria-label={`${title} presentation`}>
+  <div class="swiper presentation-swiper">
+    <div class="swiper-wrapper">
+      <!-- 1. Title slide -->
+      <article
+        class:list={['swiper-slide', 'slide', 'slide-flip-a', { 'slide-no-media': !heroImage }]}
+        id="start"
+        aria-label={label(1)} data-slide-title={title}>
+        <div class="slide-title">
+          <h1 class="slide-heading" tabindex="-1">{title}</h1>
+          <p class="slide-date">
+            <i class="fa-solid fa-clock"></i> <time datetime={completedIso}>{completedText}</time>
+          </p>
+          {
+            categories.length > 0 && (
+              <div class="portfolio-labels slide-labels" role="group" aria-label="Categories">
+                {categories.map((id) => (
+                  <ButtonLink
+                    class="portfolio"
+                    href={categoryPath(id)}
+                    style={`background:${CATEGORIES[id].color}; color:#000000`}
+                  >
+                    {CATEGORIES[id].label}
+                  </ButtonLink>
+                ))}
+              </div>
+            )
+          }
+        </div>
+        {
+          heroImage && (
+            <div class="slide-media">
+              <Image
+                src={heroImage}
+                alt={heroAlt ?? ''}
+                widths={[480, 720, 1080]}
+                sizes="(max-width: 1000px) 90vw, 45vw"
+                loading="eager"
+              />
+            </div>
+          )
+        }
+        <div class="slide-body">
+          {college && <p class="slide-note">{COLLEGE_NOTE}</p>}
+          {hasIntro && <div class="slide-text"><slot /></div>}
+          <ButtonLink class="primary" href="#final-result" data-go-final>
+            <span class="btn-text">View final results</span>
+          </ButtonLink>
+        </div>
+      </article>
+
+      <!-- 2..n. Custom slides, sides flip each slide -->
+      {
+        slides.map((s, i) => (
+          <article
+            class:list={[
+              'swiper-slide',
+              'slide',
+              i % 2 === 0 ? 'slide-flip-b' : 'slide-flip-a',
+              { 'slide-no-media': s.images.length === 0 },
+            ]}
+            aria-label={label(i + 2)}
+            data-slide-title={s.title}
+          >
+            <div class="slide-title">
+              <h2 class="slide-heading">{s.title}</h2>
+            </div>
+            {s.images.length > 0 && (
+              <div class:list={['slide-media', 'images', `images-${Math.min(s.images.length, 4)}`]}>
+                {s.images.map((img) => (
+                  <Image
+                    src={img.src}
+                    alt={img.alt}
+                    widths={[480, 720, 1080]}
+                    sizes="(max-width: 1000px) 90vw, 45vw"
+                  />
+                ))}
+              </div>
+            )}
+            <div class="slide-body">
+              {s.content && <div class="slide-text" set:html={renderMarkdown(s.content)} />}
+            </div>
+          </article>
+        ))
+      }
+
+      <!-- Last. Final Result -->
+      <article
+        class="swiper-slide slide slide-final"
+        id="final-result"
+        aria-label={label(total)}
+        data-slide-title="Final Result"
+      >
+        <h2 class="slide-heading" tabindex="-1">Final Result</h2>
+        <div class="slide-text">
+          {
+            finalText ? (
+              <p>{finalText}</p>
+            ) : finalLinks.length > 0 ? (
+              <p>Click the links below to view the final project.</p>
+            ) : (
+              <p>There are no public links for this project.</p>
+            )
+          }
+          {
+            note && (
+              <p class="slide-note">
+                <strong>NOTE:</strong> {note}
+              </p>
+            )
+          }
+        </div>
+        {
+          finalLinks.length > 0 && (
+            <div class="btn-group slide-links">
+              {finalLinks.map((l) => (
+                <ButtonLink class="primary" href={l.href} rel="external">
+                  <i class={l.icon} />
+                  <span class="btn-text">{l.label}</span>
+                </ButtonLink>
+              ))}
+            </div>
+          )
+        }
+        <div class="btn-group slide-links">
+          <ButtonLink class="comms" href="#start" data-go-start>
+            <i class="fa-solid fa-rotate-left" aria-hidden="true" />
+            <span class="btn-text">Back to the beginning</span>
+          </ButtonLink>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Hidden until the script runs: without JavaScript every slide is simply stacked on the page. -->
+  <div class="presentation-nav" hidden>
+    <button type="button" class="pres-btn pres-prev" aria-label="Previous slide">
+      <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+    </button>
+    <button type="button" class="pres-btn pres-next" aria-label="Next slide">
+      <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+    </button>
+  </div>
+  <p class="sr-only" role="status" aria-live="polite" data-pres-status></p>
+</section>
+
+<div class="btn-group presentation-back">
+  <ButtonLink class="primary" href="/portfolio">
+    <i class="fa-solid fa-left-long" aria-hidden="true" />
+    <span class="btn-text">View all projects</span>
+  </ButtonLink>
+</div>
+
+<noscript>
+  <style>
+    .presentation .swiper-wrapper {
+      display: block;
+    }
+    .presentation .swiper-slide {
+      margin-bottom: 3rem;
+    }
+  </style>
+</noscript>
+
+<script>
+  import Swiper from 'swiper';
+  import { EffectFade, Keyboard, Navigation } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-fade';
+
+  const root = document.querySelector<HTMLElement>('.presentation');
+  if (root) {
+    const slideEls = Array.from(root.querySelectorAll<HTMLElement>('.swiper-slide'));
+    const nav = root.querySelector<HTMLElement>('.presentation-nav')!;
+    const status = root.querySelector<HTMLElement>('[data-pres-status]')!;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const swiper = new Swiper(root.querySelector<HTMLElement>('.presentation-swiper')!, {
+      modules: [EffectFade, Keyboard, Navigation],
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      speed: reduced ? 0 : 600,
+      autoHeight: true,
+      allowTouchMove: true,
+      keyboard: { enabled: true, onlyInViewport: true },
+      navigation: { prevEl: '.pres-prev', nextEl: '.pres-next', disabledClass: 'is-disabled' },
+    });
+
+    nav.hidden = false;
+    root.classList.add('is-ready');
+
+    // Only the visible slide can be tabbed to or read.
+    const sync = (announce: boolean) => {
+      slideEls.forEach((el, i) => el.toggleAttribute('inert', i !== swiper.activeIndex));
+      if (announce) {
+        const title = slideEls[swiper.activeIndex].dataset.slideTitle ?? '';
+        status.textContent = `Slide ${swiper.activeIndex + 1} of ${slideEls.length}: ${title}`;
+      }
+    };
+    sync(false);
+    swiper.on('slideChange', () => sync(true));
+    // Slides settle in height after images load.
+    root.querySelectorAll('img').forEach((img) => img.addEventListener('load', () => swiper.updateAutoHeight(0)));
+
+    const goFinal = (instant = false) => {
+      swiper.slideTo(slideEls.length - 1, instant || reduced ? 0 : 600);
+      slideEls[slideEls.length - 1].querySelector<HTMLElement>('h2')?.focus({ preventScroll: true });
+    };
+
+    root.querySelector('[data-go-final]')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      goFinal();
+    });
+    root.querySelector('[data-go-start]')?.addEventListener('click', (e) => {
+      e.preventDefault();
+      swiper.slideTo(0, reduced ? 0 : 600);
+      slideEls[0].querySelector<HTMLElement>('h1')?.focus({ preventScroll: true });
+    });
+    if (location.hash === '#final-result') goFinal(true);
+  }
+</script>

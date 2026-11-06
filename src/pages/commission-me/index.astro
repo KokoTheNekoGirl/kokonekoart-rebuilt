@@ -8,13 +8,11 @@ import { CURRENCY, KOFI_URL } from '@data/commissions';
 	title="Commission Me"
 	description="Preview and price your furry digital art commission. Pick a character shot, art finish, and background to get an instant estimate, then pay directly or send a request."
 >
-	<section>
-		<h1 class="page-title animate__animated animate__fadeInUp" itemprop="name">Commission Me</h1>
-		<div class="page-content animate__animated animate__fadeIn" itemprop="mainContentOfPage">
-			<p class="center">
-				Please use the selector buttons below to preview and estimate the price of your desired artwork. All prices detailed below are priced as {CURRENCY} via PayPal or <a href={KOFI_URL} target="_blank" rel="external noopener" aria-describedby="external-hint">Kofi</a>. <strong>Please read my <a href="/commission-me/tos">TOS</a> before commissioning me</strong>.
-			</p>
-			<CommissionCalculator />
-		</div>
-	</section>
+	<h1 class="page-title animate__animated animate__fadeInUp" itemprop="name">Commission Me</h1>
+	<div class="page-content animate__animated animate__fadeIn">
+		<p class="center">
+			Please use the selector buttons below to preview and estimate the price of your desired artwork. All prices detailed below are priced as {CURRENCY} via PayPal or <a href={KOFI_URL} target="_blank" rel="external noopener" aria-describedby="external-hint">Kofi</a>. <strong>Please read my <a href="/commission-me/tos">TOS</a> before commissioning me</strong>.
+		</p>
+		<CommissionCalculator />
+	</div>
 </Layout>

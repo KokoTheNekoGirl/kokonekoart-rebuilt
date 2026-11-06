@@ -1,0 +1,31 @@
+---
+import { ButtonLink, PortfolioList } from '@components';
+import { Layout } from '@layouts';
+import { CATEGORIES, type CategoryId } from '@data/portfolio-categories';
+import { getPortfolio, getUsedCategories } from '@utils/portfolio';
+
+const category = Astro.params.category as CategoryId;
+const { label } = CATEGORIES[category];
+const pieces = await getPortfolio(category);
+
+// One page per category that has at least one piece.
+export async function getStaticPaths() {
+	return (await getUsedCategories()).map((category) => ({ params: { category } }));
+}
+
+---
+
+<style>
+	.btn-primary {
+		margin-bottom:1em;
+	}
+</style>
+
+<Layout
+	title={`Portfolio: ${label}`}
+	description={`Portfolio pieces in the ${label} category: ${pieces.map((p) => p.data.title).join(', ')}.`}
+>
+	<h1 class="animate__animated animate__fadeInUp" itemprop="name">Portfolio: {label}</h1>
+	<ButtonLink class="primary center animate__animated animate__fadeIn" href="/portfolio"><i class="fa-solid fa-left-long"></i> All projects</ButtonLink>
+	<PortfolioList pieces={pieces} />
+</Layout>

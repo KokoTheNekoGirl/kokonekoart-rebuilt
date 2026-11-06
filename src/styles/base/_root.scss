@@ -24,6 +24,14 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: 'Starborn';
+  src: url('#{$base-uri}fonts/Starborn.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 
 :root{
     /* TYPOGRAPHY */
@@ -37,6 +45,7 @@
 
     /* BRAND FONTS */
     --font-face-heading: "Fuzzy Bubbles", cursive;
+    --font-face-fancy: "Starborn", cursive;
     --font-face-base: "Spinnaker", sans-serif;
     --font-awesome: 'Font Awesome 7 Free';
 
@@ -183,41 +192,16 @@ button:hover,a{
   cursor: pointer;
 }
 
-a[rel="external"]:not(.icon,.btn,.img-link),a[rel="external noopener"]:not(.icon,.btn,.img-link),a[rel="noopener"]:not(.icon,.btn,.img-link) {
+a[rel~="external"]:not(.icon,.btn,.img-link),a[rel~="noopener"]:not(.icon,.btn,.img-link) {
   position: relative;
-}
-
-a[rel="external"]:not(.icon,.btn,.img-link)::after,a[rel="external noopener"]:not(.icon,.btn,.img-link)::after,a[rel="noopener"]:not(.icon,.btn,.img-link)::after {
-  font-family: var(--font-awesome);
-  font-weight: 900;
-  content: "\f08e";
-  font-size: 12px;
-  vertical-align: middle;
-  text-decoration: none;
-  margin-left:0.25em;
-}
-
-.topbar {
-  z-index: 1;
-  position: relative;
-	background: rgb(var(--primary));
-	height:min-content;
-	padding-bottom:unset!important;
-	padding: 0.25em 0.5em!important;
-	display:flex;
-	justify-content:center;
-	text-align:center;
-	color: rgb(var(--white));
-
-  a {
-    color: rgb(var(--white));
-    text-decoration:none;
-    -webkit-text-stroke: 0.3px currentColor;
-    paint-order: stroke fill;
-
-    &:hover, &:focus-visible {
-      color: rgb(var(--secondary));
-    }
+  &::after {
+    font-family: var(--font-awesome);
+    font-weight: 900;
+    content: "\f08e";
+    font-size: 12px;
+    vertical-align: middle;
+    text-decoration: none;
+    margin-left:0.25em;
   }
 }
 

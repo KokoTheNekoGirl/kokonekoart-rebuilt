@@ -1,4 +1,4 @@
-.btn,.forminator-button{
+.btn {
     text-decoration: none;
     padding: 0.75em 1.2em;
     border-radius: 2em;
@@ -13,12 +13,50 @@
     &:hover{
         cursor: pointer;
     }
-    &[rel="external"]:hover .btn-text::after,
-    &[rel="external"]:hover .btn-text::before,
-    &[rel="external"]:focus-visible .btn-text::after,
-    &[rel="external"]:focus-visible .btn-text::before{
-        visibility: visible;
-        opacity: 1;
+    &[rel~="external"] {
+        .btn-text {
+            &::before,
+            &::after {
+                position: absolute;
+                background: rgb(var(--white));
+                display: block;
+                left: 50%;
+                transform: translateX(-50%);
+                opacity: 0;
+                z-index: 10;
+                transition: 0.5s;
+                visibility: hidden;
+            }
+            &::after {
+                content: 'This link opens an external site in a new tab.';
+                font-size: var(--font-size-xsm);
+                width: 110%;
+                text-align: center;
+                bottom: calc(100% + 1.5em);
+                padding: 2px;
+                color: rgb(var(--black));
+                border-radius: var(--default-border-radius);
+            }
+            &::before {
+                content: '';
+                width: 1em;
+                height: 1em;
+                bottom: calc(100% + 0.5em);
+                clip-path: polygon(50% 100%, 0 0, 100% 0);
+            }
+        }
+
+        &:is(:hover, :focus-visible) .btn-text {
+            &::before,
+            &::after {
+                visibility: visible;
+                opacity: 1;
+            }
+        }
+    }
+
+    i{
+        margin-right:5px !important;
     }
 
     &-portfolio{
@@ -28,38 +66,6 @@
         &:hover{
             opacity: 0.8;
         }
-    }
-
-    &[rel="external"] .btn-text::after,&[rel="external"] .btn-text::before{
-        position: absolute;
-        background: rgb(var(--white));
-        display: block;
-        left:50%;
-        transform: translateX(-50%);
-        opacity:0;
-        z-index: 10;
-        transition: 0.5s;
-        visibility: hidden;
-    }
-    &[rel="external"] .btn-text::after{
-        content:"This link opens an external site in a new tab.";
-        font-size: var(--font-size-xsm);
-        width:110%;
-        text-align: center;
-        bottom:calc(100% + 1.5em);
-        padding:2px;
-        color: rgb(var(--black));
-        border-radius: var(--default-border-radius);
-    }
-    &[rel="external"] .btn-text::before{
-        content:"";
-        width:1em;
-        bottom:calc(100% + 0.5em);
-        height:1em;
-        clip-path: polygon(50% 100%, 0 0, 100% 0);
-    }
-    i{
-        margin-right:5px !important;
     }
 
     &-icon {

@@ -1,106 +1,15 @@
 ---
+import { PortfolioList } from '@components';
 import { Layout } from '@layouts';
-import { Image } from 'astro:assets';
-import { getCollection } from 'astro:content';
-import { BaseHead, FormattedDate } from '@components';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@consts';
+import { getPortfolio } from '@utils/portfolio';
 
-
-const posts = (await getCollection('portfolio')).sort(
-	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
-);
+const pieces = await getPortfolio();
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			ul {
-				display: flex;
-				flex-wrap: wrap;
-				gap: 2rem;
-				list-style-type: none;
-				margin: 0;
-				padding: 0;
-			}
-			ul li {
-				width: calc(50% - 1rem);
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-			ul li:first-child {
-				width: 100%;
-				margin-bottom: 1rem;
-				text-align: center;
-			}
-			ul li:first-child img {
-				width: 100%;
-			}
-			ul li:first-child .title {
-				font-size: 2.369rem;
-			}
-			ul li img {
-				margin-bottom: 0.5rem;
-				border-radius: 12px;
-			}
-			ul li a {
-				display: block;
-			}
-			.title {
-				margin: 0;
-				color: rgb(var(--black));
-				line-height: 1;
-			}
-			.date {
-				margin: 0;
-				color: rgb(var(--gray));
-			}
-			ul li a:hover h4,
-			ul li a:hover .date {
-				color: rgb(var(--accent));
-			}
-			ul a:hover img {
-				box-shadow: var(--box-shadow);
-			}
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-					text-align: center;
-				}
-				ul li:first-child {
-					margin-bottom: 0;
-				}
-				ul li:first-child .title {
-					font-size: 1.563em;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Layout>
-			<section>
-				<ul>
-					{posts.map((post) => (
-						<li>
-							<a href={`/portfolio/${post.id}`}>
-								{post.data.heroImage && (
-									<Image width={720} height={360} src={post.data.heroImage} alt="" />
-								)}
-								<h4 class="title">{post.data.title}</h4>
-								<p class="date">
-									<FormattedDate date={post.data.pubDate} />
-								</p>
-							</a>
-						</li>
-					))}
-				</ul>
-			</section>
-		</Layout>
-	</body>
-</html>
+<Layout
+	title="My Portfolio"
+	description="Web design and development projects, design mockups, and prototypes by Jess (Koko). See how I build websites, apps, and Discord bots from the ground up."
+>
+	<h1 class="animate__animated animate__fadeInUp" itemprop="name">My Portfolio</h1>
+	<PortfolioList pieces={pieces} />
+</Layout>

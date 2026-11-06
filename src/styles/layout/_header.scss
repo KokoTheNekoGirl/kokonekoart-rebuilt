@@ -30,6 +30,30 @@
     }
 }
 
+.topbar {
+  z-index: 1;
+  position: relative;
+	background: rgb(var(--primary));
+	height:min-content;
+	padding-bottom:unset!important;
+	padding: 0.25em 0.5em!important;
+	display:flex;
+	justify-content:center;
+	text-align:center;
+	color: rgb(var(--white));
+
+  a {
+    color: rgb(var(--white));
+    text-decoration:none;
+    -webkit-text-stroke: 0.3px currentColor;
+    paint-order: stroke fill;
+
+    &:hover, &:focus-visible {
+      color: rgb(var(--secondary));
+    }
+  }
+}
+
 .page-title {
     text-align: center;
     padding: 0.2em 0 1em;

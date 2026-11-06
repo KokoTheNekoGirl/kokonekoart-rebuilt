@@ -4,6 +4,13 @@
 section {
     padding-bottom: 100px;
 }
+
+.portfolio-summary:not(:last-child) {
+    section.portfolio-piece {
+        padding-bottom: 50px;
+    }
+}
+
 .hero{
     &-section{
         margin-bottom: 100px;

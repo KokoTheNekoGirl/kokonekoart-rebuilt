@@ -24,18 +24,17 @@ const {
     type = 'website'
 } = Astro.props;
 
-const segments = Astro.url.pathname
-  .split('/')
-  .filter(Boolean);
-
+const segments = Astro.url.pathname.split('/').filter(Boolean);
 const slug = segments.at(-1) ?? 'home';
 
-const isPortfolioPiece =
-  segments[0] === 'portfolio' && segments.length > 1;
+const isCategory = segments[0] === 'portfolio' && segments[1] === 'project' && segments.length > 2;
+const isPortfolioPiece = segments[0] === 'portfolio' && segments.length > 1 && !isCategory;
 
-const bodyClasses = isPortfolioPiece
-  ? ['portfolio-piece', `portfolio-${slug}`]
-  : [`page-${slug}`];
+const bodyClasses = isCategory
+  ? ['page-portfolio', `category-${slug}`]
+  : isPortfolioPiece
+    ? ['portfolio-piece', `portfolio-${slug}`]
+    : [`page-${slug}`];
 
 const today = new Date();
 ---

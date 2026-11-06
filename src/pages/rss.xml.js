@@ -1,6 +1,6 @@
 import { getCollection } from 'astro:content';
 import rss from '@astrojs/rss';
-import { SITE_DESCRIPTION, SITE_TITLE } from '@consts';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 
 export async function GET(context) {
 	const posts = await getCollection('portfolio');
@@ -9,8 +9,10 @@ export async function GET(context) {
 		description: SITE_DESCRIPTION,
 		site: context.site,
 		items: posts.map((post) => ({
-			...post.data,
-			link: `/portfolio/${post.id}/`,
+			title: post.data.title,
+			description: post.data.description,
+			pubDate: post.data.completed,
+			link: `/portfolio/${post.id}`,
 		})),
 	});
 }
