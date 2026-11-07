@@ -2,13 +2,15 @@
 import { PortfolioList } from '@components';
 import Layout from '@layouts/Layout.astro';
 import { getPortfolio } from '@utils/portfolio';
+import { breadcrumbs } from '@utils/schema';
 
 const pieces = await getPortfolio();
 ---
 
 <Layout
-	title="My Portfolio"
+	title="Web Design & Development Portfolio"
 	description="Web design and development projects, design mockups, and prototypes by Jess (Koko). See how I build websites, apps, and Discord bots from the ground up."
+	jsonLd={breadcrumbs(Astro.site, [{ name: 'Portfolio', path: '/portfolio' }])}
 >
 	<h1 class="animate__animated animate__fadeInUp" itemprop="name">My Portfolio</h1>
 	<PortfolioList pieces={pieces} />

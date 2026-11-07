@@ -47,6 +47,7 @@ const featured = (await getPortfolio()).filter((p) => p.data.featured);
   import { Autoplay, EffectFade, A11y, Keyboard } from 'swiper/modules';
   import 'swiper/css';
   import 'swiper/css/effect-fade';
+  import { respectReducedMotion } from '@utils/swiper-motion';
 
   const el = document.querySelector<HTMLElement>('.portfolio-preview-swiper');
   const count = Number(el?.dataset.count ?? 0);
@@ -61,13 +62,11 @@ const featured = (await getPortfolio()).filter((p) => p.data.featured);
       speed: 750,
       loop: true,
       keyboard: { enabled: true },
+      a11y: { slideRole: 'listitem' },
       autoplay: { delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true },
     });
 
-    // Don't auto-rotate when reduced motion is on (OS setting or the site toggle).
-    const sync = (reduced: boolean) => (reduced ? swiper.autoplay.stop() : swiper.autoplay.start());
-    sync(root.classList.contains('reduce-motion'));
-    document.addEventListener('reducemotion:change', (e) => sync((e as CustomEvent<{ enabled: boolean }>).detail.enabled));
+    respectReducedMotion(swiper);
   }
 </script>
 

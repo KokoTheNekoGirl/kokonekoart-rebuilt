@@ -3,21 +3,24 @@ import Layout from '@layouts/Layout.astro';
 import { SITE_TITLE } from '@consts';
 import { Image } from 'astro:assets';
 import { Profile } from '@assets';
-import { ButtonLink, SocialLinks, ExternalLink } from '@components';
+import { ButtonLink, SocialLinks } from '@components';
 import { getAboutItems } from '@data/about';
+import { personNode, personId } from '@utils/schema';
 const items = await getAboutItems();
 ---
 
 <Layout
-	title="About Me"
+	title="About Koko • Artist & Web Developer"
 	description="Nice to meet you! I'm Jess / Koko, a creative web designer, developer, and furry digital artist. Come connect with me!"
+
+	jsonLd={{ '@context': 'https://schema.org', '@type': 'ProfilePage', name: 'About Koko', mainEntity: personNode(Astro.site), about: { '@id': personId(Astro.site) } }}
 >
 <section class="about-bio-section">
 	<div class="img-wrapper animate__animated animate__fadeIn">
 		<a class="img-link" href="https://www.teamhuman.org/" rel="noopener" target="_blank" aria-describedby='external-hint'>
 			<Image class="round-img" src={Profile} alt={`${SITE_TITLE}'s Avatar. #TeamHuman`} loading="eager" fetchpriority="high" />
 		</a>
-		<p style="text-align:center;">Art by <ExternalLink href="https://toyhou.se/fawnlynx">fawnlynx</ExternalLink></p>
+		<p style="text-align:center;">Art by <a href="https://toyhou.se/fawnlynx" rel="external noopener" target="_blank">fawnlynx</a></p>
 	</div>
 	<div class="info-viewport ">
 		<ul class="about-quick-info animate__animated animate__fadeIn">

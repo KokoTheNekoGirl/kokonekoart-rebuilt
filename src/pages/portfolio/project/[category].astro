@@ -3,6 +3,7 @@ import { ButtonLink, PortfolioList } from '@components';
 import Layout from '@layouts/Layout.astro';
 import { CATEGORIES, type CategoryId } from '@data/portfolio-categories';
 import { getPortfolio, getUsedCategories } from '@utils/portfolio';
+import { breadcrumbs } from '@utils/schema';
 
 const category = Astro.params.category as CategoryId;
 const { label } = CATEGORIES[category];
@@ -23,7 +24,11 @@ export async function getStaticPaths() {
 
 <Layout
 	title={`Portfolio: ${label}`}
-	description={`Portfolio pieces in the ${label} category: ${pieces.map((p) => p.data.title).join(', ')}.`}
+	description={`Browse ${pieces.length} ${label} ${pieces.length === 1 ? 'project' : 'projects'} by Koko (KokoNekoArt): ${pieces.map((p) => p.data.title).join(', ')}.`}
+	jsonLd={breadcrumbs(Astro.site, [
+		{ name: 'Portfolio', path: '/portfolio' },
+		{ name: label, path: `/portfolio/project/${category}` },
+	])}
 >
 	<h1 class="animate__animated animate__fadeInUp" itemprop="name">Portfolio: {label}</h1>
 	<ButtonLink class="primary center animate__animated animate__fadeIn" href="/portfolio"><i class="fa-solid fa-left-long"></i> All projects</ButtonLink>

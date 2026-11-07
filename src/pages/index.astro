@@ -1,5 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
+import { HOME_TITLE, HOME_DESCRIPTION } from '@consts';
+import { personNode, brandNode, websiteNode } from '@utils/schema';
 import { Image, getImage } from 'astro:assets';
 import { Koko, KokoReduced } from '@assets';
 import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialLinks } from '@components';
@@ -8,9 +10,10 @@ import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialL
 // toggle) the still KokoReduced is used instead, and the animated file is never
 // downloaded.
 const [kokoAnimated, kokoStill] = await Promise.all([getImage({ src: Koko }), getImage({ src: KokoReduced })]);
+
 ---
 
-<Layout>
+<Layout title={HOME_TITLE} description={HOME_DESCRIPTION} jsonLd={{ '@context': 'https://schema.org', '@graph': [websiteNode(Astro.site), personNode(Astro.site), brandNode(Astro.site)] }}>
 	<section class="info-viewport hero-section">
 		<div class="hero-content">
 			<h1 class="animate__animated animate__fadeInUp" itemprop="name">Hello! I'm Jess or Koko.</h1>

@@ -32,7 +32,7 @@ if (!site) {
 }
 
 const isHomepage = Astro.url.pathname.replace(/\/+$/, '') === '';
-const pageTitle = isHomepage ? SITE_TITLE : `${title} • ${SITE_TITLE}`;
+const pageTitle = isHomepage ? title : `${title} • ${SITE_TITLE}`;
 const canonicalURL = new URL(
   Astro.url.pathname,
   site

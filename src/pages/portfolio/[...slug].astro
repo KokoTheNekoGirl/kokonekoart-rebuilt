@@ -4,6 +4,7 @@ import Layout from '@layouts/Layout.astro';
 import { PortfolioPresentation } from '@components';
 import { isoDate } from '@utils/last-modified';
 import { pieceHref, type PortfolioEntry } from '@utils/portfolio';
+import { breadcrumbs, personId } from '@utils/schema';
 
 export async function getStaticPaths() {
 	const posts = await getCollection('portfolio');
@@ -26,7 +27,7 @@ const jsonLd = {
 	description,
 	dateCreated: isoDate(completed, 'UTC'),
 	url: new URL(pieceHref(post), Astro.site).href,
-	author: { '@type': 'Person', name: 'Koko' },
+	author: { '@id': personId(Astro.site) },
 };
 ---
 
@@ -36,6 +37,10 @@ const jsonLd = {
 	image={heroImage}
 	imageAlt={heroAlt ?? title}
 	type="article"
+	jsonLd={breadcrumbs(Astro.site, [
+		{ name: 'Portfolio', path: '/portfolio' },
+		{ name: title, path: pieceHref(post) },
+	])}
 >
 	<article class="page" itemscope itemtype="https://schema.org/CreativeWork">
 		<PortfolioPresentation piece={post}>

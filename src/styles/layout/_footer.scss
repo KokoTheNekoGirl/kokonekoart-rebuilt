@@ -12,6 +12,10 @@
     font-size: var(--font-size-base);
 
     a {
+        color: rgb(var(--off-black));
         text-decoration: none;
+        &:hover {
+            color: rgb(var(--btn-hover));
+        }
     }
 }

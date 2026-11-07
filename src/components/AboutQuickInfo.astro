@@ -6,7 +6,12 @@ const items = (await getAboutItems()).filter((i) => i.quick);
 
 <div class="info-viewport">
   <h2 class="info-viewport-title animate__animated animate__fadeIn">I am...</h2>
-  <div class="swiper about-swiper animate__animated animate__fadeIn">
+  <div
+    class="swiper about-swiper animate__animated animate__fadeIn"
+    role="region"
+    aria-roledescription="carousel"
+    aria-label="A few things about me"
+  >
     <ul class="swiper-wrapper">
       {items.map((i) => <li class="swiper-slide" set:html={i.html} />)}
     </ul>
@@ -18,6 +23,7 @@ const items = (await getAboutItems()).filter((i) => i.quick);
   import { Autoplay, EffectFade } from 'swiper/modules';
   import 'swiper/css';
   import 'swiper/css/effect-fade';
+  import { respectReducedMotion } from '@utils/swiper-motion';
 
   const wrapper = document.querySelector('.about-swiper .swiper-wrapper');
   if (wrapper) {
@@ -29,7 +35,7 @@ const items = (await getAboutItems()).filter((i) => i.quick);
     wrapper.append(...slides);
   }
 
-  new Swiper('.about-swiper', {
+  const swiper = new Swiper('.about-swiper', {
     modules: [Autoplay, EffectFade],
     effect: 'fade',
     fadeEffect: { crossFade: true },
@@ -38,6 +44,7 @@ const items = (await getAboutItems()).filter((i) => i.quick);
     autoplay: { delay: 2500, disableOnInteraction: false, pauseOnMouseEnter: true },
     allowTouchMove: true,
   });
+  respectReducedMotion(swiper);
 </script>
 
 <script>
@@ -53,6 +60,7 @@ const items = (await getAboutItems()).filter((i) => i.quick);
 <style>
   .swiper {
     width: 300px;
+    max-width: 100%;
     height: 96px;
   }
   .about-swiper {

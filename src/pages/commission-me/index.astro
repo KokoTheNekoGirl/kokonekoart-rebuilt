@@ -1,17 +1,39 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import { CommissionCalculator, ExternalLink } from '@components';
-import { CURRENCY, KOFI_URL } from '@data/commissions';
+import { CommissionCalculator } from '@components';
+import { CURRENCY, KOFI_URL, SHOTS } from '@data/commissions';
+import { personId, breadcrumbs } from '@utils/schema';
+
+// Base prices only: the art finish, background and add-ons are added on top in the calculator.
+const service = {
+	'@context': 'https://schema.org',
+	'@type': 'Service',
+	name: 'Furry digital art commissions',
+	serviceType: 'Digital art commission',
+	description: 'Custom furry digital art: headshots, halfbody, fullbody and chibi, in sketch, lineart, flat color or shaded finishes.',
+	provider: { '@id': personId(Astro.site) },
+	url: new URL('/commission-me', Astro.site).href,
+	hasOfferCatalog: {
+		'@type': 'OfferCatalog',
+		name: 'Commission types',
+		itemListElement: SHOTS.map((s) => ({
+			'@type': 'Offer',
+			itemOffered: { '@type': 'Service', name: `${s.label} commission` },
+			priceSpecification: { '@type': 'PriceSpecification', minPrice: s.price, priceCurrency: CURRENCY },
+		})),
+	},
+};
 ---
 
 <Layout
-	title="Commission Me"
+	title="Commission Furry Digital Art"
 	description="Preview and price your furry digital art commission. Pick a character shot, art finish, and background to get an instant estimate, then pay directly or send a request."
+	jsonLd={[service, breadcrumbs(Astro.site, [{ name: 'Commissions', path: '/commission-me' }])]}
 >
 	<h1 class="page-title animate__animated animate__fadeInUp" itemprop="name">Commission Me</h1>
 	<div class="page-content animate__animated animate__fadeIn">
 		<p class="center">
-			Please use the selector buttons below to preview and estimate the price of your desired artwork. All prices detailed below are priced as {CURRENCY} via PayPal or <ExternalLink href={KOFI_URL}>Ko-Fi</ExternalLink>. <strong>Please read my <a href="/commission-me/tos">TOS</a> before commissioning me</strong>.
+			Please use the selector buttons below to preview and estimate the price of your desired artwork. All prices detailed below are priced as {CURRENCY} via PayPal or <a href={KOFI_URL} target="_blank" rel="external noopener" aria-describedby="external-hint">Kofi</a>. <strong>Please read my <a href="/commission-me/tos">TOS</a> before commissioning me</strong>.
 		</p>
 		<CommissionCalculator />
 	</div>

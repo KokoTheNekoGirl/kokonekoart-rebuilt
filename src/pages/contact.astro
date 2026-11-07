@@ -2,12 +2,14 @@
 import Layout from '@layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { KokoAlt } from '@assets';
-import { ContactForm, SocialLinks, ExternalLink } from '@components';
+import { ContactForm, SocialLinks } from '@components';
+import { personId } from '@utils/schema';
 ---
 
 <Layout
-	title="Contact Me"
-	description="Get in touch with KokoNekoArt. Choose the platform you'd like me to reach you on and send me a message."
+	title="Contact Koko"
+	description="Get in touch with the person behind KokoNekoArt. Choose the platform you'd like me to reach you on and send me a message."
+	jsonLd={{ '@context': 'https://schema.org', '@type': 'ContactPage', name: 'Contact Koko', about: { '@id': personId(Astro.site) } }}
 >
 	<article class="page">
 		<h1 class="animate__animated animate__fadeInUp" itemprop="name">Contact Me</h1>
@@ -27,7 +29,7 @@ import { ContactForm, SocialLinks, ExternalLink } from '@components';
 					<SocialLinks />
 					<p class="small">I have the right to ignore suspicious messages. I do not accept random friend/follow requests!</p>
 					<Image src={KokoAlt} class="koko-alt animate__animated animate__fadeIn" alt="Digital Art of my Fursona, Koko by dragon.wishes" />
-					<p style="text-align:center;">Art by <ExternalLink href="https://www.instagram.com/dragon.wishes/">dragon.wishes</ExternalLink></p>
+					<p style="text-align:center;">Art by <a href="https://www.instagram.com/dragon.wishes/" rel="external" target="_blank">dragon.wishes</a></p>
 				</div>
 			</div>
 		</section>

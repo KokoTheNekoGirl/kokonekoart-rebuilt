@@ -3,7 +3,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '@consts';
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { SkipLink, ReducedMotion } from 'accessible-astro-components'
-import { BaseHead, HeaderLink, Stars, ExternalLink } from '@components';
+import { BaseHead, HeaderLink, Stars } from '@components';
 import { Logo, KokoNekoArt } from '@assets';
 
 interface Props {
@@ -13,6 +13,7 @@ interface Props {
     imageAlt?: string;
     noindex?: boolean;
     type?: 'website' | 'article';
+    jsonLd?: object | object[];
 }
 
 const {
@@ -21,8 +22,10 @@ const {
     image,
     imageAlt,
     noindex = false,
-    type = 'website'
+    type = 'website',
+    jsonLd = [],
 } = Astro.props;
+const jsonLdItems = Array.isArray(jsonLd) ? jsonLd : [jsonLd];
 
 const segments = Astro.url.pathname.split('/').filter(Boolean);
 const slug = segments.at(-1) ?? 'home';
@@ -50,6 +53,7 @@ const today = new Date();
         noindex={noindex}
         type={type}
     />
+    {jsonLdItems.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
     <slot name="head" />
 </head>
 
@@ -59,7 +63,7 @@ const today = new Date();
     <Stars />
 
     <section class="topbar">
-        <span>I stand with human artists and developers. <ExternalLink href="https://www.teamhuman.org/">Support #TeamHuman</ExternalLink>.</span>
+        <span>I stand with human artists and developers. <a href="https://www.teamhuman.org/" target="_blank" rel="external" aria-describedby="external-hint">Support #TeamHuman</a>.</span>
     </section>
     <header id="header">
         <a class="site-branding" href="/" title={SITE_TITLE} rel="home" itemprop="url">
@@ -87,7 +91,7 @@ const today = new Date();
 
     <footer id="footer" role="contentinfo">
         <div id="copyright">
-            {SITE_TITLE} &copy; {today.getFullYear()} | All rights reserved. | <a href="/privacy"><i class="fa-solid fa-shield-halved"></i> Privacy</a> |
+            {SITE_TITLE} &copy; {today.getFullYear()} | All rights reserved. | <a href="/privacy">Privacy</a> |
             <div class="motion-control">
             <ReducedMotion initialMode="auto" label="Toggle reduced motion">
                 <i slot="off" class="fa-solid fa-circle-play" aria-hidden="true"></i>
