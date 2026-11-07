@@ -230,11 +230,6 @@
     }
 }
 
-li img.wp-smiley, li:not(:has(.small)) img.emoji {
-    height: 32px !important;
-    width: 32px !important;
-}
-
 .icon-group{
     display: flex;
     justify-content: center;
@@ -243,9 +238,6 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
     &:has(.paw-icon){
         margin-top: 2em;
         gap:2.5em;
-    }
-    &:has(.mini-icons){
-        margin-top:1em;
     }
 }
 
@@ -328,7 +320,7 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
     }
 }
 
-.paw-icon:has(.icon:hover),.mini-paw-icon:has(.icon:hover) {
+.paw-icon:has(.icon:hover) {
     transform: rotate(-15deg);
     .toe-beans{
         background: rgb(var(--btn-hover));

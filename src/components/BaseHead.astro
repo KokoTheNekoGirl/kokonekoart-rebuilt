@@ -1,6 +1,9 @@
 ---
-import '@assets/fontawesome/css/all.min.css';
-import 'animate.css';
+import '@assets/fontawesome/css/all.subset.css';
+import 'animate.css/source/_vars.css';
+import 'animate.css/source/_base.css';
+import 'animate.css/source/fading_entrances/fadeIn.css';
+import 'animate.css/source/fading_entrances/fadeInUp.css';
 import '../styles/theme.scss';
 
 import { SITE_TITLE } from '@consts';
@@ -102,6 +105,6 @@ const imageURL = new URL(image.src, site);
 <meta name="twitter:image" content={imageURL.href} />
 
 <!-- Fonts -->
-<Font cssVariable="--font-spinnaker" preload />
-<Font cssVariable="--font-fuzzy-bubbles" />
+<Font cssVariable="--font-spinnaker" preload={[{ weight: 400, style: 'normal' }]} />
+<Font cssVariable="--font-fuzzy-bubbles" preload={[{ weight: 400, style: 'normal' }]} />
 <Font cssVariable="--font-starborn" />

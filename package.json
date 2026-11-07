@@ -9,7 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "fa:subset": "node scripts/fa-subset.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^8.1.2",
@@ -32,6 +33,7 @@
     "@parcel/watcher@2.6.0": true
   },
   "devDependencies": {
+    "purgecss": "^9.0.0",
     "unplugin-auto-import": "^21.1.0"
   }
 }

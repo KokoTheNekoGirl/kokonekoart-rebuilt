@@ -3,12 +3,6 @@
     margin:0 auto;
 }
 
-.column-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 100px 50px;
-}
-
 
 .mini-box{
     background: rgb(var(--accent));
@@ -65,23 +59,6 @@
     .portfolio-piece { 
         display:grid;
         gap: 50px;
-
-        &-section{
-            display:grid;
-            gap: 50px 100px;
-
-            .mini-box{
-                display:flex;
-                flex-direction: column;
-                gap:0.5em;
-                justify-content: center;
-                align-items: center;
-                text-align: center;
-                & *{
-                    margin:0;
-                }
-            }
-        }
 
         .featured-image {
             position:relative;
@@ -197,11 +174,6 @@
         .icon-group{
             margin-bottom:1em;
         }
-    }
-}
-.single-post #content {
-    *{
-        margin:0;
     }
 }
 .round-img img,img.round-img{
