@@ -130,43 +130,88 @@ export function initKokoLive2D(root: HTMLElement) {
       }).observe(root);
 
       // --- life ---------------------------------------------------------------------------
-      let tx = 0.5; // pointer, 0..1 across the viewport
-      let ty = 0.4;
-      let gx = 0.5; // smoothed
-      let gy = 0.4;
+      // Where she looks, -1..1 on each axis. She follows any pointer (mouse, pen or a finger dragging)
+      // relative to where her head sits on the page, and looks around on her own whenever nothing
+      // has moved for a few seconds (which is all the time on a phone).
+      let ptrX = 0;
+      let ptrY = 0;
+      let ptrAt = -Infinity; // last time a pointer moved over the page
+      let ptrInside = false;
+      let gx = 0; // smoothed gaze
+      let gy = 0;
       let pokeAt = -Infinity;
-      let nextBlink = performance.now() + 1500;
+      let nextFidget = performance.now() + 2500; // quick head tilt now and then, which also swings the hair
+      let fidgetAt = -Infinity;
+      let fidgetDir = 1;
+      let nextBlink = performance.now() + 900;
       let blinkStart = -Infinity;
+      const clamp = (v: number, a = -1, b = 1) => Math.max(a, Math.min(b, v));
 
       addEventListener(
         'pointermove',
         (e) => {
-          tx = e.clientX / innerWidth;
-          ty = e.clientY / innerHeight;
+          const r = canvas.getBoundingClientRect();
+          const cx = r.left + r.width / 2; // her head is roughly top-centre of the canvas
+          const cy = r.top + r.height * 0.3;
+          const reach = Math.max(220, r.width * 0.7); // how far away counts as "fully turned"
+          ptrX = clamp((e.clientX - cx) / reach);
+          ptrY = clamp((cy - e.clientY) / reach);
+          ptrAt = performance.now();
+          ptrInside = true;
         },
         { passive: true },
       );
+      document.documentElement.addEventListener('pointerleave', () => (ptrInside = false));
       canvas.addEventListener('pointerdown', () => {
         if (performance.now() - pokeAt > 1800) track('koko-poke');
         pokeAt = performance.now();
       });
 
+      // Slow, never-repeating looking around (sums of unrelated sine waves)
+      const wander = (t: number) => ({
+        x: Math.sin(t * 0.55) * 0.55 + Math.sin(t * 1.13 + 1.3) * 0.3,
+        y: Math.sin(t * 0.41 + 0.8) * 0.3 + Math.sin(t * 0.97) * 0.12,
+      });
+
+      // Hair is driven by the rig's own physics file (puppet-full.physics3.json). The player would
+      // run it before our head angles are set (and then reset them), so it never sees the head move.
+      // Take it over and evaluate it ourselves, right after the angles are written.
+      const physics: any = base.physics;
+      base.physics = undefined;
+      let physDt = 1 / 60;
+      const HAIR_IDS = ['ParamHairFront', 'ParamHairSide', 'ParamHairBack'];
+      const HAIR_GAIN = 8;
+      const params = core._model.parameters;
+      const values: Float32Array = params.values;
+      const hairIdx = HAIR_IDS.map((id) => params.ids.indexOf(id)).filter((i) => i >= 0);
+
       const set = (id: string, v: number) => core.setParameterValueById(id, v);
-      const BLINK_MS = 170;
+      const BLINK_MS = 300;
 
       base.on('beforeModelUpdate', () => {
         const now = performance.now();
         const t = now / 1000;
 
-        // Look toward the pointer. Head turns a little more than the body.
-        const x = (gx - 0.5) * 2; // -1..1
-        const y = (0.5 - gy) * 2;
-        set('ParamAngleX', x * 22);
-        set('ParamAngleY', y * 16);
-        set('ParamAngleZ', x * -5 + Math.sin(t * 0.7) * 1.5);
-        set('ParamBodyAngleX', x * 6 + Math.sin(t * 0.5) * 1.2);
-        set('ParamEyeBallX', x * 0.9);
-        set('ParamEyeBallY', y * 0.8);
+        if (now >= nextFidget) {
+          fidgetAt = now;
+          fidgetDir = Math.random() < 0.5 ? -1 : 1;
+          nextFidget = now + 4000 + Math.random() * 5000;
+        }
+        const f = (now - fidgetAt) / 700;
+        const fidget = f >= 0 && f <= 1 ? Math.sin(f * Math.PI) * Math.sin(f * Math.PI * 1.5 + 0.3) : 0;
+
+        // Head angles are small in this rig (X/Y ±10, Z ±30, body ±30), so scale to those.
+        set('ParamAngleX', clamp(gx * 10 + fidget * fidgetDir * 4, -10, 10));
+        set('ParamAngleY', gy * 10);
+        set('ParamAngleZ', gx * -16 + Math.sin(t * 0.9) * 4 + fidget * fidgetDir * 18);
+        set('ParamBodyAngleX', gx * 14 + Math.sin(t * 0.5) * 2);
+        set('ParamBodyAngleY', gy * 8);
+        set('ParamEyeBallX', clamp(gx * 1.3));
+        set('ParamEyeBallY', clamp(gy * 1.3));
+
+        physics?.evaluate(core, physDt);
+        // The physics output is gentle at web-page head speeds, so give it more swing
+        for (const i of hairIdx) values[i] = clamp(values[i] * HAIR_GAIN);
 
         // Breathing
         set('ParamBreath', (Math.sin(t * 1.9) + 1) / 2);
@@ -174,10 +219,12 @@ export function initKokoLive2D(root: HTMLElement) {
         // Blinking, every few seconds
         if (now >= nextBlink) {
           blinkStart = now;
-          nextBlink = now + 2500 + Math.random() * 3500;
+          // every 2-5 s, and now and then a quick double blink
+          nextBlink = now + (Math.random() < 0.2 ? BLINK_MS + 120 : 2000 + Math.random() * 3000);
         }
         const b = (now - blinkStart) / BLINK_MS;
-        const open = b >= 0 && b <= 1 ? Math.abs(b * 2 - 1) : 1; // 1 -> 0 -> 1
+        // Close fast (first 35%), hold a beat, then open a little slower
+        const open = b < 0 || b > 1 ? 1 : b < 0.35 ? 1 - b / 0.35 : Math.min(1, (b - 0.45) / 0.55);
         set('ParamEyeLOpen', open);
         set('ParamEyeROpen', open);
 
@@ -197,8 +244,15 @@ export function initKokoLive2D(root: HTMLElement) {
         frame = 0;
         const dt = Math.min(now - last, 100);
         last = now;
-        gx += (tx - gx) * Math.min(1, dt * 0.006);
-        gy += (ty - gy) * Math.min(1, dt * 0.006);
+        // Follow the cursor while it is active on the page, otherwise look around by herself
+        const following = ptrInside && now - ptrAt < 3500;
+        const w = wander(now / 1000);
+        const goalX = following ? ptrX : w.x;
+        const goalY = following ? ptrY : w.y;
+        physDt = Math.min(dt / 1000, 0.05);
+        const ease = Math.min(1, dt * (following ? 0.012 : 0.004));
+        gx += (goalX - gx) * ease;
+        gy += (goalY - gy) * ease;
         model.update(dt);
         app.renderer.render(app.stage);
         if (shouldRun()) frame = requestAnimationFrame(tick!);

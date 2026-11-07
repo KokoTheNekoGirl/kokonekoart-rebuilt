@@ -11,9 +11,9 @@
     --font-size-xxsm: clamp(14px, 2vw + 1rem, 16px);
 
     /* BRAND FONTS */
-    --font-face-heading: var(--font-fuzzy-bubbles);
-    --font-face-fancy: var(--font-starborn);
-    --font-face-base: var(--font-spinnaker);
+    --font-face-heading: 'Fuzzy Bubbles', var(--font-fuzzy-bubbles);
+    --font-face-fancy: 'Starbron', var(--font-starborn);
+    --font-face-base: 'Spinnaker', var(--font-spinnaker);
     --font-awesome: 'Font Awesome 7 Free';
 
     /* BRAND COLOURS */

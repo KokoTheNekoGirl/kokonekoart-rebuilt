@@ -4,7 +4,8 @@
 		"Moc": "puppet-full.moc3",
 		"Textures": [
 			"texture_00.webp"
-		]
+		],
+		"Physics": "puppet-full.physics3.json"
 	},
 	"Groups": [
 		{
