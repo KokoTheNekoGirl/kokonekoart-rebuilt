@@ -5,6 +5,7 @@ categories: [design-mockups, figma-prototype]
 completed: 2024-04-30
 heroImage: "@portfolio/streamer-project.png"
 heroAlt: "Media streamer app mockup"
+featured: true
 
 slides:
   - title: Context
@@ -37,7 +38,7 @@ slides:
 links:
   figma:
     url: https://www.figma.com/design/zzbsCSnbBH0GKvmjbNpE0n/Media-Streamer?m=auto&t=sXndBhbg6coqyecD-6
-    type: design
+    type: prototype
 ---
 
 **Role:** UI Designer

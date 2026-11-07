@@ -13,6 +13,8 @@ const portfolio = defineCollection({
 			heroImage: z.optional(image()),
 			heroAlt: z.string().optional(),
 			categories: z.array(z.enum(CATEGORY_IDS)).default([]),
+			/** Show this piece's featured image in the home page carousel. */
+			featured: z.boolean().default(false),
 			slides: z
 				.array(
 					z.object({

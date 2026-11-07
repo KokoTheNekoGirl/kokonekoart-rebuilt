@@ -10,4 +10,8 @@
     background: rgb(var(--footer));
     box-shadow: 0px 0px 30px 30px rgba(var(--footer),1);
     font-size: var(--font-size-base);
+
+    a {
+        text-decoration: none;
+    }
 }

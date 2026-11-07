@@ -5,6 +5,7 @@ completed: 2025-09-23
 categories: [discord-bot, live-site]
 heroImage: "@assets/portfolio/regpoints.png"
 heroAlt: "Screenshot of the RegPoints landing page."
+featured: true
 
 slides:
   - title: Context

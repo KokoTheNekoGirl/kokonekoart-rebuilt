@@ -2,6 +2,7 @@
 import { PUBLIC_PAYPAL_CLIENT_ID, PUBLIC_RECAPTCHA_SITE_KEY } from 'astro:env/client';
 import { ADD_ONS, BACKGROUNDS, CURRENCY, DEFAULT_SELECTION, REF_SHEET, SHOTS, STYLES, resolve } from '@data/commissions';
 import { FORM_ADD_ONS, IMAGE_TYPES, REQUEST_LIMITS } from '@utils/commission-form';
+import ExternalLink from './ExternalLink.astro';
 
 // First paint comes from the same resolve() the script and the API use.
 const initial = resolve(DEFAULT_SELECTION);
@@ -19,9 +20,7 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
 >
   <noscript>
     <p class="form-notice">
-      This form needs JavaScript for checkout. Without it, you can email me at
-      <a href="mailto:contact@kokoneko.art">contact@kokoneko.art</a> or use the
-      <a href="/commission-me">pay directly</a> options.
+      This form needs JavaScript for checkout. Without it, you can <a href="/commission-me">pay me directly</a>.
     </p>
   </noscript>
 
@@ -193,9 +192,7 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
       <button type="button" class="btn btn-comms" data-prev>&laquo; Previous Step</button>
     </div>
 
-    <p class="recaptcha-legal">
-      This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="external noopener" aria-describedby="external-hint">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="external noopener" aria-describedby="external-hint">Terms of Service</a> apply.
-    </p>
+    <p class="recaptcha-legal">This site is protected by reCAPTCHA and the Google <ExternalLink href="https://policies.google.com/privacy">Privacy Policy</ExternalLink> and <ExternalLink href="https://policies.google.com/terms">Terms of Service</ExternalLink> apply.</p>
   </fieldset>
 </form>
 
@@ -233,6 +230,7 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
     setStatus,
     showError,
   } from '../utils/form-client';
+  import { track, trackForm } from '../utils/track';
 
   const form = document.querySelector<HTMLFormElement>('#request-form');
 
@@ -335,6 +333,7 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
         focusFirstError(form);
         return;
       }
+      track('commission-step-2');
       goTo(2);
     });
     $('[data-prev]').addEventListener('click', () => goTo(1));
@@ -342,6 +341,7 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
     steps[1].hidden = true; // without JS both steps stay visible
 
     preloadOnFirstUse(form, siteKey);
+    const tracker = trackForm(form, 'commission', () => ({ step: steps[1].hidden ? 1 : 2 }));
     bindCounter(detailsInput, $<HTMLElement>('[data-count]'), REQUEST_LIMITS.details);
 
     /* ---------- Step 2: reference images ---------- */
@@ -465,6 +465,7 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
       for (const [name, message] of Object.entries(errors)) showError(field(name), message);
       if (Object.keys(errors).length) {
         setStatus(status, 'Please fix the highlighted fields before paying.', true);
+        tracker.error('validation', Object.keys(errors));
         focusFirstError(steps[1]);
         return false;
       }
@@ -521,7 +522,12 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
               body: JSON.stringify({ ...readChoice(), recaptcha: token }),
             });
             const body = await res.json().catch(() => ({}));
-            if (!res.ok || !body.id) throw new Error(body.message ?? 'Could not start checkout.');
+            if (!res.ok || !body.id) {
+              if (res.status === 403) tracker.blocked();
+              else tracker.error('server');
+              throw new Error(body.message ?? 'Could not start checkout.');
+            }
+            track('commission-payment-started');
             setStatus(status, '');
             return body.id as string;
           },
@@ -542,10 +548,15 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
             try {
               const res = await fetch('/api/commission/capture', { method: 'POST', body: fd });
               const body = await res.json().catch(() => ({}));
-              if (res.ok && body.ok) return showThanks(body.orderId, body.emailed !== false);
+              if (res.ok && body.ok) {
+                tracker.success();
+                return showThanks(body.orderId, body.emailed !== false);
+              }
+              tracker.error('server');
               for (const [name, message] of Object.entries(body.errors ?? {})) showError(field(name), message as string);
               setStatus(status, body.message ?? 'Something went wrong. Please try again.', true);
             } catch {
+              tracker.error('network');
               setStatus(
                 status,
                 `I lost the connection while finishing up. If you were charged, please email contact@kokoneko.art with order ${data.orderID}.`,
@@ -554,7 +565,10 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
             }
           },
 
-          onCancel: () => setStatus(status, 'Checkout cancelled. You have not been charged.'),
+          onCancel: () => {
+            track('commission-payment-cancelled');
+            setStatus(status, 'Checkout cancelled. You have not been charged.');
+          },
           onError: (err: Error) =>
             setStatus(status, err?.message || 'Something went wrong with PayPal. Please try again.', true),
         })

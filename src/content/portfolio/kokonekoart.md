@@ -5,6 +5,7 @@ categories: [astro-typescript, live-site]
 completed: 2026-11-11
 heroImage: "@portfolio/kokonekoart.png"
 heroAlt: "Screenshot of the rebuilt KokoNekoArt website"
+featured: true
 
 slides:
   - title: Context
@@ -42,6 +43,9 @@ slides:
       I researched and tested which deployments would work best with my skill level and ultimate goals for my desired site architecture. I tried Next.js with a headless WordPress instance, but I still wanted to challenge myself even further by straying away from CMS. As much as I love visual interfaces, I did want to learn more code-heavy frameworks. That's when I discovered Astro, with its dynamic components and markdown blog content. I got to work immediately in a local Astro project and began refactoring my HTML into Astro files.
       
       This rebuild also gave me the opportunity to redesign certain pages that bugged me, such as my portfolio piece case studies and my TOS page. As well, I could push my accessibility knowledge even further and rebuild SEO on my own. I also updated to [swiper.js](https://swiperjs.com/) for more flexibility and better compatibility.
+
+      I discovered [Umami](https://umami.is) when I was researching alternative analytics trackers. I really valued the cookieless approach and more control over exactly what I wanted to be tracked. It allowed me to me more privacy concious for my users.
+
     images:
       - src: "@portfolio/kokonekoart-portfolio.png"
         alt: Rough wireframes for two slides of my portfolio case studies, redesigned for the rebuilt portfolio site.
@@ -53,7 +57,7 @@ slides:
 
       When moving to WordPress, I knew I wanted to have a commission form for easier payments. I also discovered Forminator had the ability for query URLs, which gave me the idea to prefill the commission form based on what the customer selected. It was a challenge to format the request URL just right for the form to fill in effectively.
 
-      Refactoring my commission calculator into an Astro instance was also a challenge. I knew I wanted to have everything in its own data TypeScript file, since I heavily dislike having to update code in multiple places, it's why ACF in WordPress is one of my favourite plugins. Figuring out how mapping TypeScript data worked was really interesting and gave me the challenge I was looking for. I used this same data architecture for my about information as well. 
+      Refactoring my commission calculator into an Astro instance was also a challenge. I knew I wanted to have everything in its own data TypeScript file, since I heavily dislike having to update code in multiple places, it's why ACF in WordPress is one of my favourite plugins. Figuring out how mapping TypeScript data worked was really interesting and gave me the challenge I was looking for. I used this same single data mindset for my about information and social links as well. 
   - title: What I Learned
     content: |
       I've learned a lot since the start of this project. Building my architecture with reusable components and exporting those components into a barrel file was a game changer. It was so much fun to have these complex, dynamic components but only insert the data and content once. It was exactly what I was looking for in a static instance. I had no idea that static deployments could be this dynamic.
@@ -73,8 +77,6 @@ finalNote: This current site is live and version controlled, receiving continuou
 
 **Roles:** Artist, Designer, & Developer
 
-**Current Stack:** Astro, TypeScript, SCSS, Markdown/MDX, Barrel Files, Swiper.js, accessible-astro-components, Vercel, WordPress Migration
+**Current Stack:** Astro, TypeScript, SCSS, Markdown/MDX, Barrel Files, Swiper.js, accessible-astro-components, Vercel & Serverless Functions, PayPal REST API, Google reCAPTCHA v3, Resend (Email API), Umami Analytics, WordPress Migration
 
-**Features:** Semantic HTML, Keyboard Navigation, prefers-reduced-motion Support, Screen Reader Announcements and a no-JavaScript Fallback, Image and SEO Optimization, Typed Content, Single Source Files, Structured Data, Static Output
-
-**In Progress:** Google Analytics, Google ReCAPTCHA, AJAX, Email Deliverability API
+**Features:** Semantic HTML, Keyboard Navigation, prefers-reduced-motion Support, Screen Reader Announcements and a no-JavaScript Fallback, Image and SEO Optimization, Typed Content, Single Source Files, Structured Data, Static Output, AJAX Contact & Commission Forms, Server-side Price Validation, Bot Protection (reCAPTCHA & Honeypot), Privacy-first Cookieless Analytics, Font & CSS Optimization

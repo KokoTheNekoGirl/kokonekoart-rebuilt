@@ -1,6 +1,7 @@
 ---
 import { PUBLIC_RECAPTCHA_SITE_KEY } from 'astro:env/client';
 import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact';
+import ExternalLink from './ExternalLink.astro'
 ---
 
 <form
@@ -97,9 +98,7 @@ import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact
   </div>
 
   <p class="form-status" role="status" data-status hidden></p>
-  <p class="recaptcha-legal">
-      This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="external noopener" aria-describedby="external-hint">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="external noopener" aria-describedby="external-hint">Terms of Service</a> apply.
-    </p>
+  <p class="recaptcha-legal">This site is protected by reCAPTCHA and the Google <ExternalLink href="https://policies.google.com/privacy">Privacy Policy</ExternalLink> and <ExternalLink href="https://policies.google.com/terms">Terms of Service</ExternalLink> apply.</p>
 </form>
 
 <div class="form-success" tabindex="-1" role="status" data-success hidden>
@@ -119,6 +118,7 @@ import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact
     setStatus,
     showError,
   } from '@utils/form-client';
+  import { trackForm } from '@utils/track';
 
   const form = document.querySelector<HTMLFormElement>('#contact-form');
 
@@ -137,6 +137,7 @@ import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact
       CONTACT_LIMITS.message,
     );
     preloadOnFirstUse(form, siteKey);
+    const tracker = trackForm(form, 'contact');
 
     // Username is for every platform except Email; Email is only for Email.
     function syncPlatform() {
@@ -164,6 +165,7 @@ import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact
       if (!result.ok) {
         for (const [name, message] of Object.entries(result.errors)) showError(field(name), message);
         setStatus(status, 'Please fix the highlighted fields.', true);
+        tracker.error('validation', Object.keys(result.errors));
         focusFirstError(form);
         return;
       }
@@ -184,15 +186,19 @@ import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact
         };
 
         if (res.ok && body.ok) {
+          tracker.success();
           form.hidden = true;
           success.hidden = false;
           success.focus();
           return;
         }
+        if (res.status === 403) tracker.blocked();
+        else tracker.error('server', Object.keys(body.errors ?? {}));
         for (const [name, message] of Object.entries(body.errors ?? {})) showError(field(name), message);
         setStatus(status, body.message ?? 'Something went wrong. Please try again.', true);
         focusFirstError(form);
       } catch {
+        tracker.error('network');
         setStatus(status, 'I could not reach the server. Please check your connection and try again.', true);
       } finally {
         submit.disabled = false;

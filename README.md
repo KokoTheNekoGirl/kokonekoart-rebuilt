@@ -14,8 +14,9 @@ A hand-built portfolio and commission site for digital artist and web developer 
 - **Terms of Service accordion** written in MDX.
 - **Animated home page** with Swiper sections, star background, and a respect for reduced-motion settings.
 - **Accessible by default.** Skip link, reduced-motion toggle, keyboard-operable custom checkboxes, and accessible-astro-components for the skip link and motion toggle.
-- **Performance work.** Modular SCSS with dead rules removed, a trimmed Font Awesome stylesheet, animate.css reduced to the two animations in use, and self-hosted fonts via the Astro Fonts API with preload only on the above-the-fold fonts.
-- **SEO.** Sitemap, RSS feed, canonical URLs and Open Graph metadata.
+- **Performance work.** Modular SCSS with dead rules removed, a trimmed Font Awesome stylesheet, animate.css reduced to the two animations in use, and self-hosted fonts via the Astro Fonts API.
+- **Privacy considerate.** Anonymous, cookieless analytics through Umami instead of Google Analytics, so I have more control over and transparency about what I track.
+- **SEO.** Sitemap, RSS feed, canonical URLs and Open Graph metadata. A privacy policy is at `/privacy`.
 
 ## Tech stack
 
@@ -25,6 +26,7 @@ A hand-built portfolio and commission site for digital artist and web developer 
 | Hosting | Vercel (`@astrojs/vercel`), clean URLs, no trailing slashes |
 | Content | Astro content collections, Markdown and MDX |
 | Styling | Modular SCSS partials, CSS custom properties |
+| Analytics | Umami (cookieless, anonymous)
 | Carousels | Swiper |
 | Fonts and icons | Astro Fonts API (local provider), Font Awesome |
 | Forms | Vercel serverless API routes, Google reCAPTCHA v3, Resend, PayPal REST API |
@@ -105,4 +107,5 @@ Import aliases (`@assets`, `@components`, `@data/*`, `@layouts`, `@utils/*`, `@c
 - Site code, design and artwork: Jess (KokoNekoArt). All artwork is copyrighted and not licensed for reuse.
 - Fonts: Spinnaker and Fuzzy Bubbles (SIL Open Font Licence). Starborn by Hawtpixel, used under a licence that does not allow redistribution, so the font files are not in this repository.
 - Icons: Font Awesome. The Pro files are used under a commercial licence and are not redistributable, so they are not in this repository.
-- Libraries: Astro, Swiper, accessible-astro-components, animate.css, Resend, Sharp.
+- Libraries: Astro, Swiper, accessible-astro-components, animate.css, Sharp.
+- Third-party services: Umami (anonymous analytics), Google reCAPTCHA v3 (spam protection), PayPal (payments), Resend (email delivery), Vercel (hosting).

@@ -1,0 +1,30 @@
+---
+import Layout from '@layouts/Layout.astro';
+import { getEntry, render } from 'astro:content';
+import { formatDate, isoDate } from '@utils/last-modified';
+
+const policy = (await getEntry('legal', 'privacy'))!;
+const { Content } = await render(policy);
+
+// The date is written by hand in the front matter, so it only changes when the policy does.
+const updated = policy.data.updated!;
+
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'WebPage',
+	name: policy.data.title,
+	description: policy.data.description,
+	dateModified: isoDate(updated, 'UTC'),
+};
+---
+
+<Layout title={policy.data.title} description={policy.data.description}>
+	<section id="boxed-content">
+		<h1 class="animate__animated animate__fadeInUp">{policy.data.title}</h1>
+		<p class="center">Last Updated: <time datetime={isoDate(updated, 'UTC')}>{formatDate(updated, 'UTC')}</time></p>
+		<div class="accordion">
+			<Content />
+		</div>
+	</section>
+	<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+</Layout>

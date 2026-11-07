@@ -1,4 +1,100 @@
-<div class='info-viewport '>
-   <ul class='viewport-content-img'>
-   </ul>
-</div>
+---
+import { Image } from 'astro:assets';
+import Placeholder from '@assets/portfolio/portfolio-placeholder.jpg';
+import { getPortfolio, pieceHref } from '@utils/portfolio';
+
+// Only pieces marked `featured: true` in their front matter, newest first.
+const featured = (await getPortfolio()).filter((p) => p.data.featured);
+---
+
+{
+  featured.length > 0 && (
+    <div class="info-viewport img-only portfolio-preview">
+      <div class="viewport-overlay" />
+      <div
+        class="swiper portfolio-preview-swiper animate__animated animate__fadeIn"
+        role="region"
+        aria-roledescription="carousel"
+        aria-label="Featured portfolio pieces"
+        data-count={featured.length}
+      >
+        <ul class="swiper-wrapper">
+          {featured.map((piece, i) => (
+            <li class="swiper-slide">
+              <a href={pieceHref(piece)} aria-label={`View ${piece.data.title}`}>
+                <Image
+                  class="art-img"
+                  src={piece.data.heroImage ?? Placeholder}
+                  alt={piece.data.heroAlt ?? `${piece.data.title} preview`}
+                  width={800}
+                  height={600}
+                  widths={[400, 800, 1200]}
+                  sizes="(max-width: 840px) 100vw, 800px"
+                  fit="cover"
+                  loading={i === 0 ? 'eager' : 'lazy'}
+                />
+              </a>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
+
+<script>
+  import Swiper from 'swiper';
+  import { Autoplay, EffectFade, A11y, Keyboard } from 'swiper/modules';
+  import 'swiper/css';
+  import 'swiper/css/effect-fade';
+
+  const el = document.querySelector<HTMLElement>('.portfolio-preview-swiper');
+  const count = Number(el?.dataset.count ?? 0);
+
+  // One featured piece: nothing to rotate, so it stays a plain linked image.
+  if (el && count > 1) {
+    const root = document.documentElement;
+    const swiper = new Swiper(el, {
+      modules: [Autoplay, EffectFade, A11y, Keyboard],
+      effect: 'fade',
+      fadeEffect: { crossFade: true },
+      speed: 750,
+      loop: true,
+      keyboard: { enabled: true },
+      autoplay: { delay: 4000, disableOnInteraction: false, pauseOnMouseEnter: true },
+    });
+
+    // Don't auto-rotate when reduced motion is on (OS setting or the site toggle).
+    const sync = (reduced: boolean) => (reduced ? swiper.autoplay.stop() : swiper.autoplay.start());
+    sync(root.classList.contains('reduce-motion'));
+    document.addEventListener('reducemotion:change', (e) => sync((e as CustomEvent<{ enabled: boolean }>).detail.enabled));
+  }
+</script>
+
+<style>
+  .portfolio-preview-swiper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 3em;
+  }
+  .swiper-wrapper {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .swiper-slide,
+  .swiper-slide a {
+    display: block;
+    height: 100%;
+  }
+  .swiper-slide a:hover {
+    cursor: pointer;
+  }
+  .swiper-slide :global(img) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

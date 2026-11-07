@@ -5,6 +5,7 @@ categories: [design-mockups, website]
 completed: 2024-04-30
 heroImage: "@portfolio/kokonekoart-prototype.png"
 heroAlt: "Thumbnail of the former art commission site design"
+featured: true
 
 slides:
   - title: Context

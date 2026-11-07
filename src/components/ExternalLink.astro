@@ -1,0 +1,16 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+type Props = HTMLAttributes<'a'>;
+
+const { href, rel, ...props } = Astro.props;
+
+const external = typeof href === 'string' && /^(https?:)?\/\//.test(href) && new URL(href, Astro.site).origin !== Astro.site?.origin;
+
+const relTokens = new Set(rel?.split(/\s+/).filter(Boolean));
+
+relTokens.add('external');
+relTokens.add('noopener');
+---
+
+<a href={href} rel={relTokens.size ? [...relTokens].join(' ') : undefined} target='_blank' aria-describedby='external-hint' {...props}><slot /></a>

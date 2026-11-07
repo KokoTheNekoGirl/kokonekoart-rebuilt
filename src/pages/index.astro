@@ -1,8 +1,13 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import { Image } from 'astro:assets';
-import { Koko } from '@assets';
+import { Image, getImage } from 'astro:assets';
+import { Koko, KokoReduced } from '@assets';
 import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialLinks } from '@components';
+
+// Koko is an animated image. With reduced motion on (OS setting or the site
+// toggle) the still KokoReduced is used instead, and the animated file is never
+// downloaded.
+const [kokoAnimated, kokoStill] = await Promise.all([getImage({ src: Koko }), getImage({ src: KokoReduced })]);
 ---
 
 <Layout>
@@ -18,7 +23,19 @@ import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialL
 			</div>
 		</div>
 		<div class="spacer"></div>
-		<Image src={Koko} class="hero-img animate__animated animate__fadeIn" alt="An animated gif of my fursona Koko drawing on my digital tablet." loading="eager" fetchpriority="high" />
+		<picture class="hero-picture" data-koko>
+			<source srcset={kokoStill.src} media="(prefers-reduced-motion: reduce)" data-koko-still />
+			<img
+				src={kokoAnimated.src}
+				width={kokoAnimated.attributes.width}
+				height={kokoAnimated.attributes.height}
+				class="hero-img animate__animated animate__fadeIn"
+				alt="My fursona Koko drawing on my digital tablet."
+				loading="eager"
+				fetchpriority="high"
+				decoding="async"
+			/>
+		</picture>
 	</section>
 	<section class="about-section">
 		<div class="mini-box">
@@ -55,7 +72,7 @@ import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialL
 				<ButtonLink class="primary" href="/portfolio">View portfolio</ButtonLink>
 			</div>
 		</div>
-		<!-- <PortfolioPreview /> -->
+		<PortfolioPreview />
 	</section>
 	<section class="contact-section">
 		<div class="mini-box">
@@ -67,3 +84,12 @@ import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialL
 		</div>
 	</section>
 </Layout>
+
+<script>
+	// Keep the hero image in step with the site's reduced-motion toggle.
+	// Setting the <source> media to "all" forces the still; "not all" forces the animation.
+	const still = document.querySelector<HTMLSourceElement>('[data-koko-still]');
+	const apply = (reduced: boolean) => { if (still) still.media = reduced ? 'all' : 'not all'; };
+	apply(document.documentElement.classList.contains('reduce-motion'));
+	document.addEventListener('reducemotion:change', (e) => apply((e as CustomEvent<{ enabled: boolean }>).detail.enabled));
+</script>

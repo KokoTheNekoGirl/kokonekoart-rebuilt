@@ -1,9 +1,5 @@
 ---
 import '@assets/fontawesome/css/all.subset.css';
-import 'animate.css/source/_vars.css';
-import 'animate.css/source/_base.css';
-import 'animate.css/source/fading_entrances/fadeIn.css';
-import 'animate.css/source/fading_entrances/fadeInUp.css';
 import '../styles/theme.scss';
 
 import { SITE_TITLE } from '@consts';
@@ -108,3 +104,15 @@ const imageURL = new URL(image.src, site);
 <Font cssVariable="--font-spinnaker" preload={[{ weight: 400, style: 'normal' }]} />
 <Font cssVariable="--font-fuzzy-bubbles" preload={[{ weight: 400, style: 'normal' }]} />
 <Font cssVariable="--font-starborn" />
+
+<!-- Umami: cookieless, anonymous analytics. Production on kokoneko.art only; honours Do Not Track. -->
+{import.meta.env.PROD && (
+  <script
+    is:inline
+    defer
+    src="https://cloud.umami.is/script.js"
+    data-website-id="f80d74ad-fee6-4347-8ac5-19e1c8f2421c"
+    data-domains="kokoneko.art"
+    data-do-not-track="true"
+  ></script>
+)}

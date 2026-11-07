@@ -3,7 +3,7 @@ import Layout from '@layouts/Layout.astro';
 import { SITE_TITLE } from '@consts';
 import { Image } from 'astro:assets';
 import { Profile } from '@assets';
-import { ButtonLink, SocialLinks } from '@components';
+import { ButtonLink, SocialLinks, ExternalLink } from '@components';
 import { getAboutItems } from '@data/about';
 const items = await getAboutItems();
 ---
@@ -17,7 +17,7 @@ const items = await getAboutItems();
 		<a class="img-link" href="https://www.teamhuman.org/" rel="noopener" target="_blank" aria-describedby='external-hint'>
 			<Image class="round-img" src={Profile} alt={`${SITE_TITLE}'s Avatar. #TeamHuman`} loading="eager" fetchpriority="high" />
 		</a>
-		<p style="text-align:center;">Art by <a href="https://toyhou.se/fawnlynx" rel="external noopener" target="_blank">fawnlynx</a></p>
+		<p style="text-align:center;">Art by <ExternalLink href="https://toyhou.se/fawnlynx">fawnlynx</ExternalLink></p>
 	</div>
 	<div class="info-viewport ">
 		<ul class="about-quick-info animate__animated animate__fadeIn">

@@ -1,6 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 import { ReCaptcha } from '@assets';
+import { ExternalLink } from '@components';
 ---
 
 <div id="clouds" aria-hidden="true"></div>
@@ -9,7 +10,7 @@ import { ReCaptcha } from '@assets';
 <div class="commission-goal">
     <div class="wrapper">
         <div class="small">
-            <p>My services are now PWYW over on my <a href="https://ko-fi.com/kokonekogirl" target="_blank" rel="external" aria-describedby="external-hint">Kofi</a>!</p>
+            <p>My services are now PWYW over on my <ExternalLink href="https://ko-fi.com/kokonekogirl">Ko-Fi</ExternalLink>!</p>
         </div>
         <div class="bar-wrapper">
             <div class="bar" style="width:7%"></div>

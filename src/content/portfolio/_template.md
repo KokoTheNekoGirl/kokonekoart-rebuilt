@@ -5,6 +5,7 @@ completed: 2025-01-31 # YYYY-MM-DD. Archive sorts by this. Before 2024-05-01 add
 categories: [live-site, website] # discord-bot | live-site | design-mockups | figma-prototype | website | react-typescript | astro-typescript
 heroImage: "@portfolio/project-name.png"
 heroAlt: "Describe the featured image"
+featured: false
 
 # Slides after the title slide. Any title, markdown content, any number of images.
 # Layout flips sides each slide. Remove any you don't need.

@@ -4,6 +4,7 @@ export { default as ButtonLink } from './ButtonLink.astro';
 export { default as CommissionCalculator } from './CommissionCalculator.astro';
 export { default as CommissionRequestForm } from './CommissionRequestForm.astro';
 export { default as ContactForm } from './ContactForm.astro';
+export { default as ExternalLink } from './ExternalLink.astro';
 export { default as FormattedDate } from './FormattedDate.astro';
 export { default as HeaderLink } from './HeaderLink.astro';
 export { default as IconLink } from './IconLink.astro';

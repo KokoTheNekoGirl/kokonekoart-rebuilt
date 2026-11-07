@@ -1,6 +1,7 @@
 @use 'base/_reset';
 @use 'base/_root';
-@use 'base/accessibility';
+@use 'base/_animate';
+@use 'base/_accessibility';
 @use 'base/_stars';
 
 @use 'components/_accordion.scss';

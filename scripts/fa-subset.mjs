@@ -19,7 +19,12 @@ const [result] = await new PurgeCSS().purge({
     standard: [/^fa$/, /^fa-(solid|brands|classic|fw|spin|beat|bounce|fade|flip|pulse|shake|spin-pulse)$/, /^fa-(xs|sm|lg|xl|2xl|1x|2x|3x|4x|5x)$/, /^fa-(rotate|flip)-/, /^fa-(sr-only|stack)/],
   },
   // Keep the :root/:host variable blocks and the shared base rule.
-  defaultExtractor: (c) => c.match(/[A-Za-z0-9_-]+/g) || [],
+  // Icon names are sometimes written bare and prefixed in code (icon="share-nodes" ->
+  // `fa-${icon}`), so every word in the source also counts as "fa-<word>".
+  defaultExtractor: (c) => {
+    const words = c.match(/[A-Za-z0-9_-]+/g) || [];
+    return words.flatMap((w) => [w, `fa-${w}`]);
+  },
 });
 
 // Keep only the @font-face rules for the families the icons really use

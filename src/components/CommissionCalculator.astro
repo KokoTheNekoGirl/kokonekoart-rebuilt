@@ -102,7 +102,7 @@ const groups: { name: string; id: string; heading: string; options: readonly Opt
       <ButtonLink class="primary paypal-link" href={initial.paypalUrl} rel="external">Pay directly</ButtonLink>
       <ButtonLink class="comms form-link" href={initial.requestUrl}>Request form</ButtonLink>
       <ButtonLink class="comms kofi-link" href={KOFI_URL} rel="external">
-        <i class="fa-brands fa-ko-fi"></i> Kofi
+        <i class="fa-brands fa-ko-fi"></i> Ko-Fi
       </ButtonLink>
     </div>
   </div>
@@ -120,6 +120,7 @@ const groups: { name: string; id: string; heading: string; options: readonly Opt
     type ShotId,
     type StyleId,
   } from '@data/commissions';
+  import { trackPlay } from '@utils/track';
 
   const root = document.querySelector<HTMLElement>('[data-commission]');
 
@@ -203,6 +204,15 @@ const groups: { name: string; id: string; heading: string; options: readonly Opt
     });
 
     render(); // also overrides any form state the browser restored on reload
+
+    // Anonymous: how long people play with it and what they settled on. Not every click.
+    trackPlay(root, 'calculator', () => ({
+      shot: state.shot,
+      style: state.style,
+      bg: state.bg,
+      add_ons: state.addOns.join(',') || 'none',
+      total: Number(price.textContent),
+    }));
   }
 </script>
 

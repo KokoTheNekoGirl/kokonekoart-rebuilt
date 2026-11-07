@@ -1,6 +1,7 @@
 export { default as Logo } from './logo.png';
 export { default as KokoNekoArt } from './kokonekoart.png';
 export { default as Koko } from './koko.webp';
+export { default as KokoReduced } from './koko-reduced.webp';
 export { default as KokoAlt } from './koko-alt.png';
 export { default as Profile } from './profile.jpg';
 export { default as FallbackImage } from './background.jpg';

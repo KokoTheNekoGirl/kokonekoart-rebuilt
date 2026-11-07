@@ -104,6 +104,9 @@
     .text-label .includes {
         left:100%;
     }
+    .portfolio-preview {
+        max-height: unset;
+    }
 }
 
 @media only screen and (max-width: 750px) {
