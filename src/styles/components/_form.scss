@@ -1,287 +1,425 @@
-.forminator-ui .forminator-label{
-    font-size: var(--font-size-md) !important;
-    line-height: var(--font-size-md) !important;
-    font-family: var(--font-face-heading) !important;
-    font-style: normal !important;
-    font-weight: 600 !important;
-    letter-spacing: 2% !important;
-    text-wrap: balance !important;
-    color:rgb(var(--black))!important;
+.grecaptcha-badge { visibility: hidden; }
+.form,
+.form-success {
+    max-width: 800px;
+    margin: 2em auto;
 }
 
-.forminator-field{
+.page-contact .form-success i {
+    color: rgb(var(--green));
+    paint-order: stroke fill;
+    -webkit-text-stroke: 8px black;
+}
+
+.page-request .form-success i {
+    color:rgb(var(--primary));
+}
+
+.form[hidden],
+.form [hidden],
+.form-success[hidden] {
+    display: none !important;
+}
+
+.form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2em;
+    padding-bottom: 2em;
+
+    fieldset {
+        border: 0;
+        margin: 0;
+        padding: 0;
+        min-width: 0;
+    }
+}
+
+.form-step {
+    display: grid;
+    gap: 2em;
+}
+
+.form-legend {
+    font-family: var(--font-face-heading);
+    font-size: var(--font-size-lg);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 1em;
+    padding: 0;
+    outline: none;
+}
+
+.form-steps {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.5em 1em;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: step;
+
+    li {
+        counter-increment: step;
+        font-size: var(--font-size-xxsm);
+        padding: 0.4em 1em;
+        border-radius: 2em;
+        background: rgba(var(--white), 0.4);
+        border: 2px solid rgb(var(--black));
+
+        &::before {
+            content: counter(step) '. ';
+        }
+        &[aria-current='step'] {
+            background: rgb(var(--secondary));
+            color: rgb(var(--black));
+            font-weight: 600;
+        }
+    }
+}
+
+// ---------- Fields ----------
+
+.form-field {
+    position: relative;
     display: flex;
     flex-direction: column;
-    select{
-        width: fit-content;
-        margin: 0 auto;
+    gap: 1em;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    min-width: 0;
+}
+
+.form-label {
+    font-size: var(--font-size-md);
+    line-height: var(--font-size-md);
+    font-family: var(--font-face-heading);
+    font-weight: 600;
+    letter-spacing: 2%;
+    text-wrap: balance;
+    color: rgb(var(--black));
+    padding: 0;
+}
+
+.required::after {
+    content: '\f005';
+    color: rgb(var(--red));
+    font-size: 10px;
+    font-family: var(--font-awesome);
+    font-weight: 900;
+    vertical-align: text-top;
+    margin-left: 0.5em;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75em 1.2em;
+    border-radius: 2em;
+    transition: 0.5s;
+    border: 2px solid rgb(var(--black));
+    background: rgba(var(--white), 0.4);
+    backdrop-filter: blur(3px);
+    color: rgb(var(--black));
+    font-size: var(--font-size-sm);
+    font-family: var(--font-face-base);
+    outline: none;
+
+    &:hover,
+    &:focus {
+        background: rgb(var(--white));
+    }
+    &:focus-visible {
+        outline: 3px solid rgb(var(--secondary));
+        outline-offset: 2px;
     }
 }
 
-.page-request .entry-content {
-    max-width: 800px;
-    margin: 0 auto; 
+select.form-control {
+    text-align: center;
+    text-align-last: center;
+    appearance: none;
+    cursor: pointer;
+
+    option:disabled {
+        color: rgb(var(--grey));
+    }
 }
-.forminator-custom-form {
-    .forminator-field-html .forminator-field{
-        background: rgb(var(--white));
-        padding:2em;
-        border-radius: var(--default-border-radius);
-        i {
-            color: rgb(var(--primary));
-        }
-        p{
-            margin-bottom: 20px;
-        }
-    }
-    select, input[type="text"],input[type="email"]{
-        width:100%;
-        padding: 0.75em 1.2em;
-        border-radius: 2em;
-        transition: 0.5s;
-        display: flex;
-        border: 2px solid rgb(var(--black));
-        background: rgba(var(--white),0.4);
-        backdrop-filter: blur(3px);
-        color: rgb(var(--black));
-        font-size: var(--font-size-sm);
-        outline: none;
-        font-family: var(--font-face-base);
-    }
-    select:hover,input[type="text"]:hover,input[type="email"]:hover,textarea:hover{
-        background: rgb(var(--white));
-        cursor: pointer;
-    }
-    select:focus,input[type="text"]:focus,input[type="email"]:focus,textarea:focus{
-        background: rgb(var(--white));
-    }
-    textarea {
-        padding: 0.75em 1.2em;
-        border-radius: 2em;
-        transition: 0.5s;
-        outline: none;
-        border: 2px solid rgb(var(--black));
-        background: rgba(var(--white),0.4);
-        backdrop-filter: blur(3px);
-        color: rgb(var(--black));
-        font-size: var(--font-size-sm);
-        font-family: var(--font-face-base);
-        resize: vertical;
-        width:100%;
-    }
-    select{
-        text-align: center;
-        appearance: none;
-    }
-    input[type="checkbox"] {
-        display: none;
-    }
-    .forminator-field-checkbox, .forminator-description{
-        max-width: 400px;
-        width: 100%;
-        margin: 0 auto;
-        font-size: 16px;
-    }
-    .forminator-field-textarea .forminator-description{
-        display: flex;
-        flex-direction: column;
-    }
-    .forminator-checkbox{
-        width: fit-content;
-    }
-    .forminator-checkbox-label{
-        font-size: var(--font-size-sm);
-        cursor: pointer;
-    }
-    .forminator-multi-upload {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 auto;
-        border-radius: var(--default-border-radius);
-        padding: 0.75em 1.2em;
-        background: rgba(var(--white),0.4);
-        backdrop-filter: blur(3px);
-        border: 2px solid rgb(var(--black));
-        overflow: hidden;
-        position: relative;
-        resize: none;
-        &::before{
-            content: "\f0c6";
-            font-weight: 900;
-            font-family: var(--font-awesome);
-            
-        }
-        &::after{
-            content: "Add Images";
-        }
-        [type="file"] {
-            cursor: pointer !important;
-            display: block;
-            font-size: 999px;
-            filter: alpha(opacity=0);
-            min-height: 100%;
-            min-width: 100%;
-            opacity: 0;
-            position: absolute;
-            right: 0px;
-            text-align: right;
-            top: 0px;
-            z-index: 1;
-          }
-    }
-    .forminator-row{
-        margin:0 !important;
-    }
-    .forminator-uploaded-files{
-        display:grid;
-        grid-template-columns: repeat(3,1fr);
-    }
-    .forminator-uploaded-file{
-        &--content{
-            position: relative;
-            padding:0 1.2em;
-            width: fit-content;
-            margin: 0 auto;
-        }
-        &--text *{
-            font-size: 16px;
-            line-height: 1;
-        }
-        &--image{
-            margin-bottom: 2px;
-        }
-        .forminator-img-preview{
-            height: 100px;
-            width: 100px;
-            background-position: center center;
-            background-size: cover;
-            background-repeat: no-repeat;
-            margin: 0 auto;
-        }
-    }
-    .forminator-field {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        gap:1em;
-    }
-    .forminator-button-delete{
-        background: none;
-        border:none;
-        padding:0;
+
+textarea.form-control {
+    resize: vertical;
+    border-radius: 1.5em;
+    min-height:100px;
+}
+
+.select-wrap {
+    position: relative;
+
+    &::after {
+        content: '\f13a';
         position: absolute;
-        top: 102px;
-        right: 0;
-        .forminator-icon-close{
-            color: rgb(var(--red));
-        }
-    }
-    .forminator-required{
-        color: transparent;
-        font-size:0;
-        vertical-align: text-top;
-    }
-    .forminator-required::after{
-        color: rgb(var(--red));
-        font-size: 10px;
-        font-family: var(--font-awesome);
-        font-weight: 900;
-        display: inline;
-        content:"\f005"
-    }
-    .forminator-field:has(select),.forminator-field:has(input[type="email"],input[type="text"]) {
-        max-width: 400px;
-        width: 100%;
-        margin: 0 auto;
-    }
-    .forminator-field:has(select)::after{
-        content:"\f13a";
-        position: absolute;
-        top:calc(var(--font-size-md) + 0.5em + 27.5%);
+        top: 50%;
+        right: 1em;
+        transform: translateY(-50%);
         font-size: var(--font-size-md);
-        right:1em;
         pointer-events: none;
         transition: 0.5s;
         font-family: var(--font-awesome);
         font-weight: 900;
     }
-    .forminator-has_error:has(select)::after{
-        top:calc(var(--font-size-md) + 0.2em + 25.5%);
+    &:has(select:focus)::after {
+        transform: translateY(-50%) rotate(180deg);
     }
-    .forminator-field:has(select:focus)::after,.forminator-field:has(select:active)::after{
-        transform: rotate(180deg);
+}
+
+.form-hint {
+    font-size: var(--font-size-xxsm);
+    margin: 0;
+    text-align: center;
+}
+
+.form-count {
+    text-align: right;
+
+    .over {
+        color: rgb(var(--red));
     }
-    .forminator-field-calculation {
-        padding: 0.75em 1.2em !important;
-        background: rgba(var(--white),0.4);
-        max-width: 400px;
-        width: 100%;
-        border-radius: var(--default-border-radius);
-        backdrop-filter: blur(3px);
-        margin: 0 auto;
-        .forminator-input-with-prefix{
-            display:flex;
-            align-items: center;
-            justify-content: center;
-            .forminator-calculation{
-                background:none;
-                border:none;
-                text-align: center;
-                font-size: var(--font-size-xsm);
-                line-height: 32px;
-                height:32px;
-                letter-spacing: 2%;
-                width:70px;
-                display: block;
-                font-family: var(--font-face-base);
-                color: rgb(var(--black));
-            }
+}
+
+.form-error {
+    margin: 0;
+    font-size: var(--font-size-xxsm);
+    font-weight: 600;
+    color: rgb(var(--red));
+}
+
+.has-error .form-control {
+    border-color: rgb(var(--red));
+}
+
+.form-status {
+    text-align: center;
+    margin: 0;
+    &.is-error {
+        color: rgb(var(--red));
+        font-weight: 600;
+    }
+}
+
+.form-notice {
+    background: rgba(var(--white),0.6);
+    padding: 2em;
+    border-radius: var(--default-border-radius);
+
+    i {
+        color: rgb(var(--primary));
+    }
+    p {
+        margin-bottom: 20px;
+        &:last-child {
+            margin-bottom: 0;
         }
-
     }
 }
-.page-contact .forminator-custom-form .forminator-field:has(select)::after{
-    top: calc(var(--font-size-md) + 0.2em + 23.5%);
-}
-.page-contact .forminator-custom-form .forminator-has_error:has(select)::after{
-    top:calc(var(--font-size-md) + 0.2em + 17.5%);
-}
-form:has(.forminator-pagination--content){
-    margin: 2em 0 !important;
+
+// Honeypot: off-screen, not display:none (some bots skip hidden fields).
+.hp {
+    position: absolute;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
 }
 
-.forminator-field-captcha {
-    display: none;
+// ---------- Checkboxes ----------
+
+.form-checks {
+    gap: 0.75em;
+    justify-self: center;
+
+    .form-label {
+        margin-bottom: 0.25em;
+    }
 }
 
-.forminator-pagination--content,.page-contact .forminator-custom-form {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap:2em;
-    padding-bottom: 2em;
-}
-.forminator-pagination-footer{
-    display: flex;
+// Uses the calculator's .checkbox-wrapper / .check-box look (see _btn.scss).
+.form-checks .checkbox-wrapper {
+    position: relative;
+    cursor: pointer;
+
+    // _btn.scss hides the input with display:none, which also removes it from the tab order.
+    // Keep it focusable but invisible; the .check-box label next to it draws the box.
+    input[type='checkbox'] {
+        display: block;
+        position: absolute;
+        top: 0;
+        left: 0;
+        opacity: 0;
+        width: 1px;
+        height: 1px;
+    }
+    input:focus-visible + .check-box {
+        outline: 3px solid rgb(var(--primary));
+        outline-offset: 2px;
+    }
+    .form-check-text {
+        cursor: pointer;
+        font-size: var(--font-size-sm);
+    }
+    .price-tag {
+        font-size: var(--font-size-xxsm);
+        opacity: 0.75;
+    }
 }
 
-#forminator-paypal-submit{
-    max-width: 50%;
-    width: 100%;
-}
+// ---------- Uploads ----------
 
-.forminator-g-recaptcha{
+.upload {
+    position: relative;
     display: flex;
     justify-content: center;
 }
 
-.forminator-edit-module{
-    display: none;
+.upload-input {
+    position: absolute;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+
+    &:focus-visible + .upload-btn {
+        outline: 3px solid rgb(var(--primary));
+        outline-offset: 2px;
+    }
 }
 
-.forminator-custom-form .forminator-field-calculation .forminator-input-with-prefix .forminator-calculation {
-    padding:0;
-    background:unset;
-    backdrop-filter:unset;
+.upload-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 1em;
+
+    &:empty {
+        display: none;
+    }
+}
+
+.upload-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    text-align: center;
+
+    img {
+        height: 100px;
+        width: 100px;
+        object-fit: cover;
+        border-radius: var(--default-border-radius);
+    }
+}
+
+.upload-name {
+    font-size: 14px;
+    line-height: 1.1;
+    overflow-wrap: anywhere;
+}
+
+.upload-remove {
+    position: absolute;
+    top: -6px;
+    right: 0;
+    width: 1.8em;
+    height: 1.8em;
+    border-radius: 50%;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    background: rgb(var(--white));
+    color: rgb(var(--red));
+
+    &:focus-visible {
+        outline: 3px solid rgb(var(--primary));
+    }
+}
+
+// ---------- Totals, actions, payment ----------
+
+.total-box {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 0.75em 1.2em;
+    background: rgba(var(--white), 0.4);
+    backdrop-filter: blur(3px);
+    border-radius: var(--default-border-radius);
+    text-align: center;
+
+    .total {
+        margin: 0;
+        font-size: var(--font-size-md);
+        font-family: var(--font-face-heading);
+    }
+    .total-label {
+        margin-right: 0.5em;
+    }
+}
+
+.form-summary {
+    border: 2px solid rgb(var(--secondary));
+    padding: 0.4em 1em;
+    width: fit-content;
+    border-radius: var(--default-border-radius);
+    text-align: center;
+    margin: 0;
+    justify-self: center;
+    background: rgba(var(--white), 0.4);
+}
+
+.page-contact .form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1em;
+}
+
+.paypal-buttons {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.recaptcha-legal {
+    display: none;
+    text-align: center;
+    font-size: 14px;
+    margin: 0;
+    a {
+        font-size: 14px;
+    }
+}
+
+.form-success {
+    text-align: center;
+    padding: 2em;
+    background: rgba(var(--white),0.6);
+    border-radius: var(--default-border-radius);
+    outline: none;
+
+    .form-order {
+        font-weight: 600;
+    }
+    .form-warning {
+        color: rgb(var(--red));
+        font-weight: 600;
+    }
+}
+
+button.btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
 }
 
 .custom-recaptcha-badge {
@@ -329,7 +467,7 @@ form:has(.forminator-pagination--content){
     }
 
     &:hover,
-    &:focus-visible-within {
+    &:has(:focus-visible) {
         transform: translateX(calc(100vw - 100%))
     }
 }

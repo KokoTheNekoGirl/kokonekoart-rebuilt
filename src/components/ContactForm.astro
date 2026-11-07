@@ -1,0 +1,202 @@
+---
+import { PUBLIC_RECAPTCHA_SITE_KEY } from 'astro:env/client';
+import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact';
+---
+
+<form
+  id="contact-form"
+  class="form contact-form"
+  method="post"
+  action="/api/contact"
+  novalidate
+  data-site-key={PUBLIC_RECAPTCHA_SITE_KEY}
+  data-email-platform={EMAIL_PLATFORM}
+>
+  <noscript>
+    <p class="form-notice">
+      This form needs JavaScript to protect it from spam. Without it, you can reach out to me directly on my social media.
+    </p>
+  </noscript>
+
+  <div class="form-field" data-field="platform">
+    <label class="form-label" for="contact-platform">
+      Platform<span class="required"><span class="sr-only"> (required)</span></span>
+    </label>
+    <div class="select-wrap">
+      <select
+        class="form-control"
+        id="contact-platform"
+        name="platform"
+        required
+        aria-describedby="contact-platform-hint"
+      >
+        <option value="" selected disabled>Select a Platform</option>
+        {CONTACT_PLATFORMS.map((p) => <option value={p.id}>{p.label}</option>)}
+      </select>
+    </div>
+    <p class="form-hint" id="contact-platform-hint">If an option is not listed, I may not have an account for it.</p>
+    <p class="form-error" id="contact-platform-error" hidden></p>
+  </div>
+
+  <div class="form-field" data-field="name">
+    <label class="form-label" for="contact-name">
+      Name<span class="required"><span class="sr-only"> (required)</span></span>
+    </label>
+    <input class="form-control" id="contact-name" name="name" type="text" autocomplete="name" required maxlength={CONTACT_LIMITS.name} />
+    <p class="form-error" id="contact-name-error" hidden></p>
+  </div>
+
+  <div class="form-field" data-field="username" data-for-platform="other">
+    <label class="form-label" for="contact-username">
+      Username<span class="required"><span class="sr-only"> (required)</span></span>
+    </label>
+    <input class="form-control" id="contact-username" name="username" type="text" autocomplete="off" maxlength={CONTACT_LIMITS.username} />
+    <p class="form-error" id="contact-username-error" hidden></p>
+  </div>
+
+  <div class="form-field" data-field="email" data-for-platform="email">
+    <label class="form-label" for="contact-email">
+      Email Address<span class="required"><span class="sr-only"> (required)</span></span>
+    </label>
+    <input class="form-control" id="contact-email" name="email" type="email" autocomplete="email" maxlength={CONTACT_LIMITS.email} />
+    <p class="form-error" id="contact-email-error" hidden></p>
+  </div>
+
+  <div class="form-field" data-field="subject">
+    <label class="form-label" for="contact-subject">Subject</label>
+    <input class="form-control" id="contact-subject" name="subject" type="text" maxlength={CONTACT_LIMITS.subject} />
+    <p class="form-error" id="contact-subject-error" hidden></p>
+  </div>
+
+  <div class="form-field" data-field="message">
+    <label class="form-label" for="contact-message">
+      Message<span class="required"><span class="sr-only"> (required)</span></span>
+    </label>
+    <textarea
+      class="form-control"
+      id="contact-message"
+      name="message"
+      rows="5"
+      required
+      maxlength={CONTACT_LIMITS.message}
+      placeholder="Enter your message..."
+      aria-describedby="contact-message-count"></textarea>
+    <p class="form-hint form-count" id="contact-message-count"><span data-count>0 / {CONTACT_LIMITS.message}</span></p>
+    <p class="form-error" id="contact-message-error" hidden></p>
+  </div>
+
+  <!-- Spam trap: people never see this; bots fill it in. -->
+  <div class="hp" aria-hidden="true">
+    <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+  </div>
+
+  <div class="form-actions">
+    <button class="btn btn-primary" type="submit" data-submit>
+      <span class="whiskers-left"></span><span class="btn-text">Send Message</span><span class="whiskers-right"></span>
+    </button>
+  </div>
+
+  <p class="form-status" role="status" data-status hidden></p>
+  <p class="recaptcha-legal">
+      This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="external noopener" aria-describedby="external-hint">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="external noopener" aria-describedby="external-hint">Terms of Service</a> apply.
+    </p>
+</form>
+
+<div class="form-success" tabindex="-1" role="status" data-success hidden>
+  <h2><i class="fa-solid fa-envelope-circle-check"></i> Message sent!</h2>
+  <p>Thank you for contacting me! I will be in touch shortly.</p>
+</div>
+
+<script>
+  import { CONTACT_LIMITS } from '@data/contact';
+  import { validateContact } from '@utils/contact-form';
+  import {
+    bindCounter,
+    clearErrors,
+    focusFirstError,
+    preloadOnFirstUse,
+    recaptchaToken,
+    setStatus,
+    showError,
+  } from '@utils/form-client';
+
+  const form = document.querySelector<HTMLFormElement>('#contact-form');
+
+  if (form) {
+    const siteKey = form.dataset.siteKey;
+    const emailPlatform = form.dataset.emailPlatform;
+    const status = form.querySelector<HTMLElement>('[data-status]');
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+    const success = document.querySelector<HTMLElement>('[data-success]')!;
+    const platform = form.elements.namedItem('platform') as HTMLSelectElement;
+    const field = (name: string) => form.querySelector<HTMLElement>(`[data-field="${name}"]`);
+
+    bindCounter(
+      form.elements.namedItem('message') as HTMLTextAreaElement,
+      form.querySelector<HTMLElement>('[data-count]')!,
+      CONTACT_LIMITS.message,
+    );
+    preloadOnFirstUse(form, siteKey);
+
+    // Username is for every platform except Email; Email is only for Email.
+    function syncPlatform() {
+      const chosen = platform.value;
+      const wantsEmail = chosen === emailPlatform;
+      const wantsUsername = chosen !== '' && !wantsEmail;
+      for (const [name, show] of [['username', wantsUsername], ['email', wantsEmail]] as const) {
+        const wrap = field(name)!;
+        wrap.hidden = !show;
+        const input = wrap.querySelector<HTMLInputElement>('input')!;
+        input.disabled = !show;
+        input.required = show;
+      }
+    }
+    platform.addEventListener('change', syncPlatform);
+    syncPlatform();
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      clearErrors(form);
+      setStatus(status, '');
+
+      const data = Object.fromEntries(new FormData(form));
+      const result = validateContact(data);
+      if (!result.ok) {
+        for (const [name, message] of Object.entries(result.errors)) showError(field(name), message);
+        setStatus(status, 'Please fix the highlighted fields.', true);
+        focusFirstError(form);
+        return;
+      }
+
+      submit.disabled = true;
+      setStatus(status, 'Sending…');
+      try {
+        const token = await recaptchaToken(siteKey, 'contact');
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...data, recaptcha: token }),
+        });
+        const body = (await res.json().catch(() => ({}))) as {
+          ok?: boolean;
+          message?: string;
+          errors?: Record<string, string>;
+        };
+
+        if (res.ok && body.ok) {
+          form.hidden = true;
+          success.hidden = false;
+          success.focus();
+          return;
+        }
+        for (const [name, message] of Object.entries(body.errors ?? {})) showError(field(name), message);
+        setStatus(status, body.message ?? 'Something went wrong. Please try again.', true);
+        focusFirstError(form);
+      } catch {
+        setStatus(status, 'I could not reach the server. Please check your connection and try again.', true);
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
+</script>

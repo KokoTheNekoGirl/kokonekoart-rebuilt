@@ -342,14 +342,6 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
         }
     }
 }
-
-.forminator-button{
-    background: rgb(var(--primary));
-    color: rgb(var(--white));
-}
-.forminator-button:hover{
-    background: rgb(var(--btn-hover));
-}
   
 .button input[type="radio"]{
     display: none;
@@ -384,7 +376,7 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
 
 /* CHECKBOXES */
 
-.checkbox-wrapper,.forminator-checkbox {
+.checkbox-wrapper {
     box-sizing: border-box;
     --background-color: rgb(var(--white));
     --checkbox-height: 25px;
@@ -422,7 +414,7 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
     display: none;
 }
 
-.checkbox-wrapper .check-box,.forminator-checkbox-box {
+.checkbox-wrapper .check-box {
     height: var(--checkbox-height);
     width: var(--checkbox-height);
     background-color: var(--background-color);
@@ -436,9 +428,7 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
 }
 
 .checkbox-wrapper .check-box::before,
-.checkbox-wrapper .check-box::after,
-.forminator-checkbox-box::before,
-.forminator-checkbox-box::after {
+.checkbox-wrapper .check-box::after {
     box-sizing: border-box;
     position: absolute;
     height: 0;
@@ -451,33 +441,30 @@ li img.wp-smiley, li:not(:has(.small)) img.emoji {
     transition: opacity ease 0.5;
 }
 
-.checkbox-wrapper .check-box::before,.forminator-checkbox-box::before {
+.checkbox-wrapper .check-box::before {
     top: calc(var(--checkbox-height) * .72);
     left: calc(var(--checkbox-height) * .41);
     box-shadow: 0 0 0 calc(var(--checkbox-height) * .05) var(--background-color);
     transform: rotate(-135deg);
 }
 
-.checkbox-wrapper .check-box::after,.forminator-checkbox-box::after  {
+.checkbox-wrapper .check-box::after {
     top: calc(var(--checkbox-height) * .37);
     left: calc(var(--checkbox-height) * .05);
     transform: rotate(-45deg);
 }
 
 .checkbox-wrapper input[type=checkbox]:checked + .check-box,
-.checkbox-wrapper .check-box.checked,
-.forminator-field input[type=checkbox]:checked + .forminator-checkbox-box {
+.checkbox-wrapper .check-box.checked {
     border-color: rgb(var(--green));
 }
 .checkbox-wrapper input[type=checkbox]:checked + .check-box::after,
-.checkbox-wrapper .check-box.checked::after,
-.forminator-field input[type=checkbox]:checked + .forminator-checkbox-box::after {
+.checkbox-wrapper .check-box.checked::after {
     height: calc(var(--checkbox-height) / 2);
     animation: dothabottomcheck 0.2s ease 0s forwards;
 }
 .checkbox-wrapper input[type=checkbox]:checked + .check-box::before,
-.checkbox-wrapper .check-box.checked::before,
-.forminator-field input[type=checkbox]:checked + .forminator-checkbox-box::before {
+.checkbox-wrapper .check-box.checked::before {
     height: calc(var(--checkbox-height) * 1.2);
     animation: dothatopcheck 0.4s ease 0s forwards;
 }

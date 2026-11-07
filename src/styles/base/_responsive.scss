@@ -87,11 +87,11 @@
     .contact-section {
         flex-direction: column;
     }
-    .portfolio-piece {
-		grid-template-columns:1fr;
+    .page-portfolio .portfolio-summary .portfolio-piece {
+		grid-template-columns:1fr!important;
 	}
 	.portfolio-summary:nth-child(even) .mini-box{
-	    order:unset;
+	    order:unset !important;
     }
 }
 @media only screen and (max-width: 850px) {
@@ -110,6 +110,9 @@
     .custom-recaptcha-badge {
         display: none;
     }
+    .recaptcha-legal {
+        display: block;
+    }
     .hero-section {
         grid-template-columns: 1fr;
         img{
@@ -124,18 +127,6 @@
     }
     .icon-group {
         flex-wrap: wrap;
-    }
-    .forminator-uploaded-files{
-        grid-template-columns: 1fr;
-    }
-    .forminator-pagination-footer{
-        flex-direction: column;
-        gap:1em;
-        align-items: center !important;
-    }
-    #forminator-paypal-submit{
-        max-width: unset;
-        order:-1;
     }
     .about-section{
         flex-direction: column;

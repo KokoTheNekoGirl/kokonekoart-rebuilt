@@ -33,7 +33,7 @@
         &:hover h2 {
             color: rgb(var(--btn-hover));
         }
-        &:focus-visible-visible {
+        &:focus-visible {
             outline: 3px solid rgb(var(--primary));
             outline-offset: 3px;
             border-radius: 1.5em;

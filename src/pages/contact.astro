@@ -1,9 +1,35 @@
 ---
-import Layout from '../layouts/ComingSoon.astro';
+import Layout from '@layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { KokoAlt } from '@assets';
+import { ContactForm, SocialLinks } from '@components';
 ---
 
 <Layout
 	title="Contact Me"
-	description="Lorem ipsum dolor sit amet"
+	description="Get in touch with KokoNekoArt. Choose the platform you'd like me to reach you on and send me a message."
 >
+	<article class="page">
+		<h1 class="animate__animated animate__fadeInUp" itemprop="name">Contact Me</h1>
+		<section class="contact-section" aria-labelledby="request-connection">
+        	<div class="info-viewport ">
+				<h2 id="request-connection">Request a Connection</h2>
+				<p class="center">
+					Select the platform you wish for me to contact you on, and I’ll connect with you as soon as I can!
+					Looking for the <a href="/commission-me/request">request a commission form</a> instead?
+				</p>
+				<ContactForm />
+			</div>
+			<div class="sticky">
+            	<div class="info-viewport ">
+					<h2>Connect Directly</h2>
+					<p>Below are a few ways to connect with me or expand my connections by following me!</p>
+					<SocialLinks />
+					<p class="small">I have the right to ignore suspicious messages. I do not accept random friend/follow requests!</p>
+					<Image src={KokoAlt} class="koko-alt animate__animated animate__fadeIn" alt="Digital Art of my Fursona, Koko by dragon.wishes" />
+					<p style="text-align:center;">Art by <a href="https://www.instagram.com/dragon.wishes/" rel="external" target="_blank">dragon.wishes</a></p>
+				</div>
+			</div>
+		</section>
+	</article>
 </Layout>

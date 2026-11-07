@@ -1,0 +1,571 @@
+---
+import { PUBLIC_PAYPAL_CLIENT_ID, PUBLIC_RECAPTCHA_SITE_KEY } from 'astro:env/client';
+import { ADD_ONS, BACKGROUNDS, CURRENCY, DEFAULT_SELECTION, REF_SHEET, SHOTS, STYLES, resolve } from '@data/commissions';
+import { FORM_ADD_ONS, IMAGE_TYPES, REQUEST_LIMITS } from '@utils/commission-form';
+
+// First paint comes from the same resolve() the script and the API use.
+const initial = resolve(DEFAULT_SELECTION);
+const ref = ADD_ONS.find((a) => a.id === REF_SHEET)!;
+const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
+---
+
+<form
+  id="request-form"
+  class="form request-form"
+  novalidate
+  data-site-key={PUBLIC_RECAPTCHA_SITE_KEY}
+  data-paypal-client-id={PUBLIC_PAYPAL_CLIENT_ID}
+  data-currency={CURRENCY}
+>
+  <noscript>
+    <p class="form-notice">
+      This form needs JavaScript for checkout. Without it, you can email me at
+      <a href="mailto:contact@kokoneko.art">contact@kokoneko.art</a> or use the
+      <a href="/commission-me">pay directly</a> options.
+    </p>
+  </noscript>
+
+  <ol class="form-steps" aria-label="Progress" data-steps>
+    <li data-step-label="1" aria-current="step">Artwork Selection</li>
+    <li data-step-label="2">Payment</li>
+  </ol>
+
+  <!-- STEP 1 -->
+  <fieldset class="form-step" data-step="1">
+    <legend class="form-legend" tabindex="-1">Artwork Selection</legend>
+
+    <div class="form-field" data-field="shot">
+      <label class="form-label" for="req-shot">
+        Character Shot<span class="required"><span class="sr-only"> (required)</span></span>
+      </label>
+      <div class="select-wrap">
+        <select class="form-control" id="req-shot" name="shot" required>
+          {SHOTS.map((s) => <option value={s.id} selected={s.id === initial.selection.shot}>{s.label} — ${s.price}</option>)}
+          <option value={REF_SHEET}>Refsheet/Custom — ${ref.price}</option>
+        </select>
+      </div>
+      <p class="form-error" id="req-shot-error" hidden></p>
+    </div>
+
+    <div class="form-notice" data-ref-notice hidden>
+      <p><i class="fa-solid fa-circle-info" aria-hidden="true"></i> {ref.info}</p>
+      <p><strong>Extra shot available at extra charge.</strong></p>
+    </div>
+
+    <div class="form-field" data-field="style">
+      <label class="form-label" for="req-style">
+        Art Finish<span class="required"><span class="sr-only"> (required)</span></span>
+      </label>
+      <div class="select-wrap">
+        <select class="form-control" id="req-style" name="style" required>
+          {STYLES.map((s) => <option value={s.id} selected={s.id === initial.selection.style}>{s.label} — ${s.price}</option>)}
+        </select>
+      </div>
+      <p class="form-error" id="req-style-error" hidden></p>
+    </div>
+
+    <div class="form-field" data-field="bg">
+      <label class="form-label" for="req-bg">
+        Background<span class="required"><span class="sr-only"> (required)</span></span>
+      </label>
+      <div class="select-wrap">
+        <select class="form-control" id="req-bg" name="bg" required aria-describedby="req-bg-hint">
+          {
+            BACKGROUNDS.map((b) => (
+              <option
+                value={b.id}
+                data-label={`${b.label} — $${b.price}`}
+                selected={b.id === initial.selection.bg}
+                disabled={initial.lockedBackgrounds.includes(b.id)}
+              >
+                {b.label} — ${b.price}
+              </option>
+            ))
+          }
+        </select>
+      </div>
+      <p class="form-hint" id="req-bg-hint" data-bg-hint hidden>
+        Pattern and Scene backgrounds need a Flatcolor or Shaded finish, or a Refsheet.
+      </p>
+      <p class="form-error" id="req-bg-error" hidden></p>
+    </div>
+
+    <fieldset class="form-field form-checks" data-field="addOns" aria-describedby="req-addons-hint">
+      <legend class="form-label">Extra Add-ons</legend>
+      {
+        FORM_ADD_ONS.map((a) => (
+          <div class="checkbox-wrapper">
+            <input type="checkbox" id={`req-addon-${a.id}`} name="addOns" value={a.id} aria-labelledby={`req-addon-${a.id}-text`} />
+            <label for={`req-addon-${a.id}`} class="check-box" />
+            <label for={`req-addon-${a.id}`} class="form-check-text" id={`req-addon-${a.id}-text`}>
+              {a.label} <span class="price-tag">+${a.price}</span>
+            </label>
+          </div>
+        ))
+      }
+      <p class="form-hint" id="req-addons-hint">These add-ons are for additional charge.</p>
+    </fieldset>
+
+    <div class="total-box">
+      <p class="total"><span class="total-label">Total Price</span> $<span data-total>{initial.total}</span>.00 {CURRENCY}</p>
+      <p class="sr-only" role="status" data-status-total>Total ${initial.total}.00 {CURRENCY}: {initial.summary}</p>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-comms" data-next>Next Step &raquo;</button>
+    </div>
+  </fieldset>
+
+  <!-- STEP 2 -->
+  <fieldset class="form-step" data-step="2">
+    <legend class="form-legend" tabindex="-1">Payment</legend>
+
+    <p class="form-summary">Your order: <strong data-summary>{initial.summary}</strong></p>
+
+    <div class="form-field" data-field="files">
+      <span class="form-label" id="req-files-label">
+        Character Reference/Inspo<span class="required"><span class="sr-only"> (required)</span></span>
+      </span>
+      <div class="upload">
+        <input
+          class="upload-input"
+          type="file"
+          id="req-files"
+          accept={IMAGE_TYPES.join(',')}
+          multiple
+          aria-labelledby="req-files-label"
+          aria-describedby="req-files-hint"
+        />
+        <label class="btn btn-comms upload-btn" for="req-files">
+          <i class="fa-solid fa-cloud-arrow-up" aria-hidden="true"></i> Add Images
+        </label>
+      </div>
+      <ul class="upload-list" data-file-list aria-label="Selected images"></ul>
+      <p class="form-hint" id="req-files-hint">
+        Upload your character files so that I can reference them when I do your art. Up to {REQUEST_LIMITS.files} images
+        (PNG, JPG, WebP or GIF). Large images are resized to fit {mb} MB in total.
+      </p>
+      <p class="form-error" id="req-files-error" hidden></p>
+    </div>
+
+    <div class="form-field" data-field="details">
+      <label class="form-label" for="req-details">Request Details</label>
+      <textarea
+        class="form-control"
+        id="req-details"
+        name="details"
+        rows="5"
+        maxlength={REQUEST_LIMITS.details}
+        aria-describedby="req-details-hint req-details-count"></textarea>
+      <p class="form-hint" id="req-details-hint">
+        Please specify details about your art request (ex: pose, expression, style, mood, etc.)
+      </p>
+      <p class="form-hint form-count" id="req-details-count"><span data-count>0 / {REQUEST_LIMITS.details}</span></p>
+      <p class="form-error" id="req-details-error" hidden></p>
+    </div>
+
+    <div class="form-field" data-field="email">
+      <label class="form-label" for="req-email">
+        Contact Email<span class="required"><span class="sr-only"> (required)</span></span>
+      </label>
+      <input
+        class="form-control"
+        id="req-email"
+        name="email"
+        type="email"
+        autocomplete="email"
+        required
+        maxlength={REQUEST_LIMITS.email}
+        aria-describedby="req-email-hint"
+      />
+      <p class="form-hint" id="req-email-hint">I'll contact you for art proofs and giving you the final product.</p>
+      <p class="form-error" id="req-email-error" hidden></p>
+    </div>
+
+    <div class="total-box">
+      <p class="total"><span class="total-label">Total Price</span> $<span data-total>{initial.total}</span>.00 {CURRENCY}</p>
+    </div>
+
+    <div id="paypal-buttons" class="paypal-buttons" aria-label="Pay with PayPal"></div>
+    <p class="form-status" role="status" data-status hidden></p>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-comms" data-prev>&laquo; Previous Step</button>
+    </div>
+
+    <p class="recaptcha-legal">
+      This site is protected by reCAPTCHA and the Google <a href="https://policies.google.com/privacy" target="_blank" rel="external noopener" aria-describedby="external-hint">Privacy Policy</a> and <a href="https://policies.google.com/terms" target="_blank" rel="external noopener" aria-describedby="external-hint">Terms of Service</a> apply.
+    </p>
+  </fieldset>
+</form>
+
+<div class="form-success" tabindex="-1" role="status" data-success hidden>
+  <h2><i class="fa-solid fa-heart-circle-check"></i> Thank you for commissioning me!</h2>
+  <p>You may receive an email within a few business days regarding your commission.</p>
+  <p class="form-order" data-order></p>
+  <p class="form-warning" data-warning hidden></p>
+</div>
+
+<script>
+  import {
+    DEFAULT_SELECTION,
+    REF_SHEET,
+    parseSelection,
+    resolve,
+    type AddOnId,
+    type Selection,
+  } from '../data/commissions';
+  import {
+    IMAGE_TYPES,
+    REQUEST_LIMITS,
+    checkFiles,
+    parseChoice,
+    sniffImage,
+    validateDetails,
+  } from '../utils/commission-form';
+  import {
+    bindCounter,
+    clearErrors,
+    focusFirstError,
+    loadScript,
+    preloadOnFirstUse,
+    recaptchaToken,
+    setStatus,
+    showError,
+  } from '../utils/form-client';
+
+  const form = document.querySelector<HTMLFormElement>('#request-form');
+
+  if (form) {
+    const siteKey = form.dataset.siteKey;
+    const paypalId = form.dataset.paypalClientId;
+    const currency = form.dataset.currency ?? 'CAD';
+
+    const $ = <T extends HTMLElement>(sel: string) => form.querySelector<T>(sel)!;
+    const field = (name: string) => form.querySelector<HTMLElement>(`[data-field="${name}"]`)!;
+
+    const shotSel = $<HTMLSelectElement>('#req-shot');
+    const styleSel = $<HTMLSelectElement>('#req-style');
+    const bgSel = $<HTMLSelectElement>('#req-bg');
+    const checks = [...form.querySelectorAll<HTMLInputElement>('input[name="addOns"]')];
+    const emailInput = $<HTMLInputElement>('#req-email');
+    const detailsInput = $<HTMLTextAreaElement>('#req-details');
+    const fileInput = $<HTMLInputElement>('#req-files');
+    const fileList = $<HTMLElement>('[data-file-list]');
+    const status = $<HTMLElement>('[data-status]');
+    const successBox = document.querySelector<HTMLElement>('[data-success]')!;
+    const steps = [...form.querySelectorAll<HTMLElement>('[data-step]')];
+
+    /* ---------- Step 1: selection, price, locking ---------- */
+
+    const readChoice = () => ({
+      shot: shotSel.value,
+      style: shotSel.value === REF_SHEET ? '' : styleSel.value,
+      bg: bgSel.value,
+      addOns: checks.filter((c) => c.checked).map((c) => c.value),
+    });
+
+    const toSelection = (c: ReturnType<typeof readChoice>): Selection => {
+      const ref = c.shot === REF_SHEET;
+      return {
+        shot: ref ? DEFAULT_SELECTION.shot : (c.shot as Selection['shot']),
+        style: ref ? DEFAULT_SELECTION.style : (c.style as Selection['style']),
+        bg: c.bg as Selection['bg'],
+        addOns: (ref ? [REF_SHEET, ...c.addOns] : c.addOns) as AddOnId[],
+      };
+    };
+
+    function render() {
+      const r = resolve(toSelection(readChoice()));
+
+      // A Ref Sheet replaces shot + finish, so the finish is hidden (and not submitted).
+      field('style').hidden = r.refSheet;
+      styleSel.disabled = r.refSheet;
+      form!.querySelector<HTMLElement>('[data-ref-notice]')!.hidden = !r.refSheet;
+
+      // Pattern/Scene are disabled (not removed) until the finish allows them.
+      for (const opt of bgSel.options) {
+        const locked = r.lockedBackgrounds.includes(opt.value as never);
+        opt.disabled = locked;
+        opt.textContent = opt.dataset.label! + (locked ? ' (locked)' : '');
+      }
+      bgSel.value = r.selection.bg;
+      $<HTMLElement>('[data-bg-hint]').hidden = r.lockedBackgrounds.length === 0;
+
+      form!.querySelectorAll<HTMLElement>('[data-total]').forEach((el) => (el.textContent = String(r.total)));
+      $<HTMLElement>('[data-summary]').textContent = r.summary;
+      $<HTMLElement>('[data-status-total]').textContent = `Total $${r.total}.00 ${currency}: ${r.summary}`;
+    }
+
+    // Links from the calculator arrive as ?char-shots=hs&art-style=sketch&bg=trans&add-ons=complex
+    (function prefill() {
+      const sel = parseSelection(new URLSearchParams(location.search));
+      shotSel.value = sel.addOns.includes(REF_SHEET) ? REF_SHEET : sel.shot;
+      styleSel.value = sel.style;
+      bgSel.value = sel.bg;
+      checks.forEach((c) => (c.checked = sel.addOns.includes(c.value as AddOnId)));
+    })();
+
+    form.querySelectorAll('[data-step="1"] select, [data-step="1"] input').forEach((el) =>
+      el.addEventListener('change', () => {
+        clearErrors(field('shot').parentElement as HTMLElement);
+        render();
+      }),
+    );
+    render();
+
+    /* ---------- Steps ---------- */
+
+    let payPalState: 'idle' | 'busy' | 'ready' = 'idle';
+
+    function goTo(n: 1 | 2) {
+      steps.forEach((s) => (s.hidden = s.dataset.step !== String(n)));
+      form!.querySelectorAll<HTMLElement>('[data-step-label]').forEach((li) => {
+        if (li.dataset.stepLabel === String(n)) li.setAttribute('aria-current', 'step');
+        else li.removeAttribute('aria-current');
+      });
+      steps[n - 1].querySelector<HTMLElement>('legend')!.focus();
+      if (n === 2) setupPayPal();
+    }
+    $('[data-next]').addEventListener('click', () => {
+      const parsed = parseChoice(readChoice());
+      if (!parsed.ok) {
+        clearErrors(form);
+        for (const [name, message] of Object.entries(parsed.errors)) showError(field(name), message);
+        focusFirstError(form);
+        return;
+      }
+      goTo(2);
+    });
+    $('[data-prev]').addEventListener('click', () => goTo(1));
+
+    steps[1].hidden = true; // without JS both steps stay visible
+
+    preloadOnFirstUse(form, siteKey);
+    bindCounter(detailsInput, $<HTMLElement>('[data-count]'), REQUEST_LIMITS.details);
+
+    /* ---------- Step 2: reference images ---------- */
+
+    let files: File[] = [];
+
+    const encode = (canvas: HTMLCanvasElement, type: string, q: number) =>
+      new Promise<Blob | null>((r) => canvas.toBlob(r, type, q));
+
+    async function shrink(file: File, maxDim: number, quality: number): Promise<File> {
+      if (file.type === 'image/gif') return file; // would lose the animation
+      try {
+        const bmp = await createImageBitmap(file);
+        const scale = Math.min(1, maxDim / Math.max(bmp.width, bmp.height));
+        const canvas = document.createElement('canvas');
+        canvas.width = Math.max(1, Math.round(bmp.width * scale));
+        canvas.height = Math.max(1, Math.round(bmp.height * scale));
+        canvas.getContext('2d')!.drawImage(bmp, 0, 0, canvas.width, canvas.height);
+        bmp.close();
+
+        let blob = await encode(canvas, 'image/webp', quality); // keeps transparency
+        if (!blob || blob.type !== 'image/webp') {
+          const flat = document.createElement('canvas');
+          flat.width = canvas.width;
+          flat.height = canvas.height;
+          const ctx = flat.getContext('2d')!;
+          ctx.fillStyle = '#fff';
+          ctx.fillRect(0, 0, flat.width, flat.height);
+          ctx.drawImage(canvas, 0, 0);
+          blob = await encode(flat, 'image/jpeg', quality);
+        }
+        if (!blob || blob.size >= file.size) return file;
+        const ext = blob.type === 'image/webp' ? 'webp' : 'jpg';
+        return new File([blob], file.name.replace(/\.[^.]*$/, '') + '.' + ext, { type: blob.type });
+      } catch {
+        return file;
+      }
+    }
+
+    const total = (list: File[]) => list.reduce((n, f) => n + f.size, 0);
+
+    async function fit(list: File[]): Promise<File[]> {
+      for (const [maxDim, q] of [[2400, 0.85], [1600, 0.75]] as const) {
+        if (total(list) <= REQUEST_LIMITS.totalBytes) break;
+        const bySize = [...list].sort((a, b) => b.size - a.size);
+        for (const f of bySize) {
+          if (total(list) <= REQUEST_LIMITS.totalBytes) break;
+          const small = await shrink(f, maxDim, q);
+          list = list.map((x) => (x === f ? small : x));
+        }
+      }
+      return list;
+    }
+
+    const kb = (n: number) => (n >= 1e6 ? `${(n / 1e6).toFixed(1)} MB` : `${Math.max(1, Math.round(n / 1e3))} KB`);
+
+    function renderFiles() {
+      fileList.replaceChildren(
+        ...files.map((f) => {
+          const li = document.createElement('li');
+          li.className = 'upload-item';
+          const img = document.createElement('img');
+          img.alt = '';
+          img.src = URL.createObjectURL(f);
+          img.onload = () => URL.revokeObjectURL(img.src);
+          const name = document.createElement('span');
+          name.className = 'upload-name';
+          name.textContent = `${f.name} (${kb(f.size)})`;
+          const remove = document.createElement('button');
+          remove.type = 'button';
+          remove.className = 'upload-remove';
+          remove.setAttribute('aria-label', `Remove ${f.name}`);
+          remove.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
+          remove.addEventListener('click', () => {
+            files = files.filter((x) => x !== f);
+            renderFiles();
+            status.focus?.();
+            fileInput.focus();
+          });
+          li.append(img, name, remove);
+          return li;
+        }),
+      );
+    }
+
+    fileInput.addEventListener('change', async () => {
+      clearErrors(field('files'));
+      const picked = [...(fileInput.files ?? [])];
+      fileInput.value = ''; // so the same file can be picked again
+
+      // Check the real first bytes, not just the name, so a renamed file is caught right away.
+      const images: File[] = [];
+      for (const f of picked) {
+        const head = new Uint8Array(await f.slice(0, 16).arrayBuffer());
+        if ((IMAGE_TYPES as readonly string[]).includes(f.type) && sniffImage(head)) images.push(f);
+      }
+      let problem = images.length < picked.length ? 'Reference files must be PNG, JPG, WebP or GIF images.' : '';
+
+      let next = [...files, ...images];
+      if (next.length > REQUEST_LIMITS.files) {
+        next = next.slice(0, REQUEST_LIMITS.files);
+        problem = `Please upload ${REQUEST_LIMITS.files} images or fewer.`;
+      }
+      next = await fit(next);
+      while (next.length && total(next) > REQUEST_LIMITS.totalBytes) {
+        next.pop();
+        problem = `Those images are too large to send together (limit ${REQUEST_LIMITS.totalBytes / 1_000_000} MB). Try fewer or smaller images.`;
+      }
+      files = next;
+      renderFiles();
+      if (problem) showError(field('files'), problem);
+    });
+
+    /* ---------- Step 2: validation + PayPal ---------- */
+
+    function validateStep2(): boolean {
+      clearErrors(steps[1]);
+      const { errors } = validateDetails({ email: emailInput.value, details: detailsInput.value });
+      const fileError = checkFiles(files);
+      if (fileError) errors.files = fileError;
+      for (const [name, message] of Object.entries(errors)) showError(field(name), message);
+      if (Object.keys(errors).length) {
+        setStatus(status, 'Please fix the highlighted fields before paying.', true);
+        focusFirstError(steps[1]);
+        return false;
+      }
+      setStatus(status, '');
+      return true;
+    }
+
+    function showThanks(orderId: string, emailed: boolean) {
+      form!.hidden = true;
+      successBox.hidden = false;
+      successBox.querySelector('[data-order]')!.textContent = `Order number: ${orderId}`;
+      const warn = successBox.querySelector<HTMLElement>('[data-warning]')!;
+      warn.hidden = emailed;
+      if (!emailed) {
+        warn.textContent =
+          'Your payment went through, but I could not send my notification email. Please email contact@kokoneko.art with your order number so I can start on your art.';
+      }
+      successBox.focus();
+    }
+
+    async function setupPayPal() {
+      if (payPalState !== 'idle') return;
+      payPalState = 'busy';
+      if (!paypalId) {
+        setStatus(status, 'Checkout is not available right now. Please email contact@kokoneko.art.', true);
+        payPalState = 'idle';
+        return;
+      }
+      try {
+        await loadScript(
+          `https://www.paypal.com/sdk/js?client-id=${encodeURIComponent(paypalId)}&currency=${currency}&intent=capture&components=buttons`,
+        );
+      } catch {
+        setStatus(status, 'PayPal could not load. Please check your connection or try again later.', true);
+        payPalState = 'idle';
+        return;
+      }
+      const paypal = (window as any).paypal;
+
+      try {
+        await paypal
+        .Buttons({
+          style: { layout: 'vertical', color: 'silver', shape: 'pill', label: 'checkout', height: 40 },
+
+          onClick: (_: unknown, actions: any) => (validateStep2() ? actions.resolve() : actions.reject()),
+
+          // The server prices the order itself; we only tell it WHAT was picked.
+          createOrder: async () => {
+            setStatus(status, 'Starting checkout…');
+            const token = await recaptchaToken(siteKey, 'commission');
+            const res = await fetch('/api/commission/order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ ...readChoice(), recaptcha: token }),
+            });
+            const body = await res.json().catch(() => ({}));
+            if (!res.ok || !body.id) throw new Error(body.message ?? 'Could not start checkout.');
+            setStatus(status, '');
+            return body.id as string;
+          },
+
+          // Buyer approved in the PayPal window: send everything; the server captures, then emails.
+          onApprove: async (data: { orderID: string }) => {
+            setStatus(status, 'Payment approved. Finishing up, please keep this page open…');
+            const fd = new FormData();
+            fd.set('orderID', data.orderID);
+            const c = readChoice();
+            fd.set('shot', c.shot);
+            fd.set('style', c.style);
+            fd.set('bg', c.bg);
+            c.addOns.forEach((a) => fd.append('addOns', a));
+            fd.set('email', emailInput.value);
+            fd.set('details', detailsInput.value);
+            files.forEach((f) => fd.append('files', f, f.name));
+            try {
+              const res = await fetch('/api/commission/capture', { method: 'POST', body: fd });
+              const body = await res.json().catch(() => ({}));
+              if (res.ok && body.ok) return showThanks(body.orderId, body.emailed !== false);
+              for (const [name, message] of Object.entries(body.errors ?? {})) showError(field(name), message as string);
+              setStatus(status, body.message ?? 'Something went wrong. Please try again.', true);
+            } catch {
+              setStatus(
+                status,
+                `I lost the connection while finishing up. If you were charged, please email contact@kokoneko.art with order ${data.orderID}.`,
+                true,
+              );
+            }
+          },
+
+          onCancel: () => setStatus(status, 'Checkout cancelled. You have not been charged.'),
+          onError: (err: Error) =>
+            setStatus(status, err?.message || 'Something went wrong with PayPal. Please try again.', true),
+        })
+        .render('#paypal-buttons');
+        payPalState = 'ready';
+      } catch (err) {
+        // PayPal rejects bad button settings here; without this the container just stays empty.
+        console.error('PayPal buttons failed to render:', err);
+        payPalState = 'idle';
+        setStatus(status, 'The PayPal button could not be shown. Please refresh, or email contact@kokoneko.art.', true);
+      }
+    }
+  }
+</script>

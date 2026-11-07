@@ -58,7 +58,7 @@ slides:
     content: |
       I've learned a lot since the start of this project. Building my architecture with reusable components and exporting those components into a barrel file was a game changer. It was so much fun to have these complex, dynamic components but only insert the data and content once. It was exactly what I was looking for in a static instance. I had no idea that static deployments could be this dynamic.
 
-      Auditing which libraries I needed and which plugins I rebuilt was another challenge. Replacing custom fields for typed, validated collections was the fun part. I also had to modify my slider content to enable swiper initiation, add in SEO meta and maintain optimization myself, and completely rebuild my payment and contact forms from Forminator. [insert here once done.]
+      Auditing which libraries I needed and which plugins I rebuilt was another challenge. Replacing custom fields for typed, validated collections was the fun part. I also had to modify my slider content to enable swiper initiation, add in SEO meta and maintain optimization myself, and completely rebuild my payment and contact forms from Forminator. I followed documentaion and researched all I could for the backend functionality. I feel I understand the frontend more than the backend.
 
       I had a lot of fun building this project and tailoring my own needs into something I could actively deploy and continue to build upon. I'm confident I could apply my learned experience to a future client project someday.
 

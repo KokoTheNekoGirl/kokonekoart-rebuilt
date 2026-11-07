@@ -1,9 +1,19 @@
 ---
-import Layout from '@layouts/ComingSoon.astro';
+import Layout from '@layouts/Layout.astro';
+import { CommissionRequestForm } from '@components';
 ---
 
 <Layout
 	title="Request a Commission"
-	description="Lorem ipsum dolor sit amet"
+	description="Request a furry digital art commission from KokoNekoArt. Choose your character shot, art finish and background, upload your references, and check out with PayPal."
 >
+	<h1 class="animate__animated animate__fadeInUp" itemprop="name">Request a Commission</h1>
+	<div id="boxed-content">
+		<p class="center">
+			Fill out the form below and insert the required information. Then you’ll be taken to checkout.
+			Check out the <a href="/commission-me">prices</a> if you haven’t already!
+			Please read my <a href="/commission-me/tos">TOS</a> before commissioning me.
+		</p>
+		<CommissionRequestForm />
+	</div>
 </Layout>
