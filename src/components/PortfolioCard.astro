@@ -24,6 +24,7 @@ const headingId = `piece-${piece.id}`;
         <Image
           src={heroImage ?? Placeholder}
           alt={heroAlt ?? `${title} preview`}
+          title={title}
           widths={[480, 720, 1080]}
           sizes="(max-width: 1000px) 100vw, 400px"
           loading={eager ? 'eager' : 'lazy'}
@@ -52,10 +53,10 @@ const headingId = `piece-${piece.id}`;
       <ButtonLink
         class="primary"
         href={href}
-        aria-label={`Read more about ${title}`}
+        aria-label={`Learn more about ${title}`}
         style="margin-top:1.5em;"
       >
-        Read More
+        View Project
       </ButtonLink>
     </div>
   </section>

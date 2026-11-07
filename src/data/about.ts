@@ -17,8 +17,8 @@ export const ABOUT = {
   personalityType: 'INFJ-T',
   nationalityEmoji: '🇨🇦',
   sexualityIcons: [
-    { src: BisexualIcon, alt: 'Bisexual Flag' },
-    { src: GreysexualIcon, alt: 'Greysexual Heart' },
+    { src: BisexualIcon, alt: 'Bisexual Flag', title: 'Bisexual' },
+    { src: GreysexualIcon, alt: 'Greysexual Heart', title:'Greysexual' },
   ],
   favouriteColourEmoji: '💜',
   interests: ['Animation', 'Anime', 'Video Games', 'Art', 'Web Design/Development'],
@@ -53,7 +53,7 @@ export function westernZodiacHtml(): string {
   const { month, day } = parseBirthday();
   const [icon, label] =
     WESTERN.find(([, , m, d]) => month > m || (month === m && day >= d)) ?? WESTERN[0];
-  return `<i class="fa-solid fa-${icon}" role="img" aria-label="${label}" title="${label}"></i>`;
+  return `<i class="fa-solid fa-${icon}" title="${label}" role="img" aria-label="${label}" title="${label}"></i>`;
 }
 
 const CHINESE = ['🐀', '🐂', '🐅', '🐇', '🐉', '🐍', '🐎', '🐐', '🐒', '🐓', '🐕', '🐖'];
@@ -66,10 +66,10 @@ export function chineseZodiac(): string {
 
 async function sexualityHtml(): Promise<string> {
   const imgs = await Promise.all(
-    ABOUT.sexualityIcons.map(async ({ src, alt }) => {
+    ABOUT.sexualityIcons.map(async ({ src, alt, title }) => {
       const img = await getImage({ src, width: ICON_WIDTH, format: 'webp' });
       const { width, height } = img.attributes;
-      return `<img class="img-icon" src="${img.src}" alt="${alt}" width="${width}" height="${height}" loading="eager" fetchpriority="high" decoding="async">`;
+      return `<img class="img-icon" src="${img.src}" alt="${alt}" title="${title}" width="${width}" height="${height}" loading="eager" fetchpriority="high" decoding="async">`;
     }),
   );
   return `<span class="icon-group">${imgs.join('')}</span>`;

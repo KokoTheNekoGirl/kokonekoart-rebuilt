@@ -6,6 +6,7 @@ import { Profile } from '@assets';
 import { ButtonLink, SocialLinks } from '@components';
 import { getAboutItems } from '@data/about';
 import { personNode, personId } from '@utils/schema';
+import ExternalLink from '@components/ExternalLink.astro';
 const items = await getAboutItems();
 ---
 
@@ -17,9 +18,9 @@ const items = await getAboutItems();
 >
 <section class="about-bio-section">
 	<div class="img-wrapper animate__animated animate__fadeIn">
-		<a class="img-link" href="https://www.teamhuman.org/" rel="noopener" target="_blank" aria-describedby='external-hint'>
-			<Image class="round-img" src={Profile} alt={`${SITE_TITLE}'s Avatar. #TeamHuman`} loading="eager" fetchpriority="high" />
-		</a>
+		<ExternalLink class="img-link" href="https://www.teamhuman.org/">
+			<Image class="round-img" src={Profile} alt={`${SITE_TITLE}'s Avatar. #TeamHuman`} title="My Avatar by fawnlynx. I support #TeamHuman" loading="eager" fetchpriority="high" />
+		</ExternalLink>
 		<p style="text-align:center;">Art by <a href="https://toyhou.se/fawnlynx" rel="external noopener" target="_blank">fawnlynx</a></p>
 	</div>
 	<div class="info-viewport ">

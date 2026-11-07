@@ -3,7 +3,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '@consts';
 import type { ImageMetadata } from 'astro';
 import { Image } from 'astro:assets';
 import { SkipLink, ReducedMotion } from 'accessible-astro-components'
-import { BaseHead, HeaderLink, Stars } from '@components';
+import { BaseHead, HeaderLink, Stars, ExternalLink } from '@components';
 import { Logo, KokoNekoArt } from '@assets';
 
 interface Props {
@@ -63,7 +63,7 @@ const today = new Date();
     <Stars />
 
     <section class="topbar">
-        <span>I stand with human artists and developers. <a href="https://www.teamhuman.org/" target="_blank" rel="external" aria-describedby="external-hint">Support #TeamHuman</a>.</span>
+        <span>I stand with human artists and developers. <ExternalLink href="https://www.teamhuman.org/">Support #TeamHuman</ExternalLink>.</span>
     </section>
     <header id="header">
         <a class="site-branding" href="/" title={SITE_TITLE} rel="home" itemprop="url">
@@ -91,7 +91,7 @@ const today = new Date();
 
     <footer id="footer" role="contentinfo">
         <div id="copyright">
-            {SITE_TITLE} &copy; {today.getFullYear()} | All rights reserved. | <a href="/privacy">Privacy</a> |
+            {SITE_TITLE} &copy; {today.getFullYear()} | All rights reserved. | <i class="fa-solid fa-shield-halved"></i> <a href="/privacy">Privacy</a> |
             <div class="motion-control">
             <ReducedMotion initialMode="auto" label="Toggle reduced motion">
                 <i slot="off" class="fa-solid fa-circle-play" aria-hidden="true"></i>

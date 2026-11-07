@@ -172,6 +172,10 @@ a[rel~="external"]:not(.icon,.btn,.img-link),a[rel~="noopener"]:not(.icon,.btn,.
   }
 }
 
+:where(a, button, summary, [tabindex]) {
+  border-radius: var(--default-border-radius);
+}
+
 .fa-leo {
   color: rgb(var(--primary));
 }

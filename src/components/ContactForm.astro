@@ -2,6 +2,8 @@
 import { PUBLIC_RECAPTCHA_SITE_KEY } from 'astro:env/client';
 import { CONTACT_LIMITS, CONTACT_PLATFORMS, EMAIL_PLATFORM } from '@data/contact';
 import ExternalLink from './ExternalLink.astro'
+import { Image } from 'astro:assets';
+import { ReCaptcha } from '@assets';
 ---
 
 <form
@@ -98,7 +100,12 @@ import ExternalLink from './ExternalLink.astro'
   </div>
 
   <p class="form-status" role="status" data-status hidden></p>
-  <p class="recaptcha-legal">This site is protected by reCAPTCHA and the Google <ExternalLink href="https://policies.google.com/privacy">Privacy Policy</ExternalLink> and <ExternalLink href="https://policies.google.com/terms">Terms of Service</ExternalLink> apply.</p>
+  <div class="recaptcha-legal">
+    <div class="custom-recaptcha-badge__icon">
+      <Image src={ReCaptcha} alt="reCAPTCHA" title="reCAPTCHA" width={64} height={64} fetchpriority="high" />
+    </div>
+    <p>This site is protected by reCAPTCHA and the Google <ExternalLink href="https://policies.google.com/privacy">Privacy Policy</ExternalLink> and <ExternalLink href="https://policies.google.com/terms">Terms of Service</ExternalLink> apply.</p>
+  </div>
 </form>
 
 <div class="form-success" tabindex="-1" role="status" data-success hidden>

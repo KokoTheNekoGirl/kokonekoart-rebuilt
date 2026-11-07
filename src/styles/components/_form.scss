@@ -393,11 +393,39 @@ textarea.form-control {
 
 .recaptcha-legal {
     display: none;
-    text-align: center;
-    font-size: 14px;
-    margin: 0;
-    a {
+    .custom-recaptcha-badge__icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: fit-content;
+        background: #fff;
+        border-radius: var(--default-border-radius);
+        margin: 0 auto 1em;
+        position: relative;
+        img {
+            display: block;
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+        }
+        &:after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            border-radius: var(--default-border-radius);
+            box-shadow: rgba(var(--btn-hover), 0.25) 0px 30px 60px -12px, rgba(var(--black), 0.3) 0px 18px 36px -18px;
+        }
+    }
+    p {
+        text-align: center;
         font-size: 14px;
+        margin: 0;
+        a {
+            font-size: 14px;
+        }
     }
 }
 

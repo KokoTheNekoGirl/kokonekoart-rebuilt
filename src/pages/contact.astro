@@ -2,7 +2,7 @@
 import Layout from '@layouts/Layout.astro';
 import { Image } from 'astro:assets';
 import { KokoAlt } from '@assets';
-import { ContactForm, SocialLinks } from '@components';
+import { ContactForm, SocialLinks, ExternalLink } from '@components';
 import { personId } from '@utils/schema';
 ---
 
@@ -28,8 +28,8 @@ import { personId } from '@utils/schema';
 					<p>Below are a few ways to connect with me or expand my connections by following me!</p>
 					<SocialLinks />
 					<p class="small">I have the right to ignore suspicious messages. I do not accept random friend/follow requests!</p>
-					<Image src={KokoAlt} class="koko-alt animate__animated animate__fadeIn" alt="Digital Art of my Fursona, Koko by dragon.wishes" />
-					<p style="text-align:center;">Art by <a href="https://www.instagram.com/dragon.wishes/" rel="external" target="_blank">dragon.wishes</a></p>
+					<Image src={KokoAlt} class="koko-alt animate__animated animate__fadeIn" title="Digital Art of my Fursona, Koko by dragon.wishes" alt="Digital Art of my Fursona, Koko by dragon.wishes" />
+					<p style="text-align:center;">Art by <ExternalLink href="https://www.instagram.com/dragon.wishes/">dragon.wishes</ExternalLink></p>
 				</div>
 			</div>
 		</section>

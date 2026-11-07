@@ -17,7 +17,7 @@ const art = getSampleArt();
       {
         art.map((a) => (
           <li class="swiper-slide img-group">
-            <Image class="art-img" src={a.src} alt={a.alt} width={360} densities={[1, 2]} />
+            <Image class="art-img" src={a.src} title={a.alt} alt={a.alt} width={360} densities={[1, 2]} />
             <span class="img-caption">{a.label}</span>
           </li>
         ))

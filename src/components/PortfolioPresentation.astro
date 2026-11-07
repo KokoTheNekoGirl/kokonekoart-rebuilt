@@ -100,6 +100,7 @@ const label = (n: number) => `Slide ${n} of ${total}`;
                   <Image
                     src={img.src}
                     alt={img.alt}
+                    title={img.alt}
                     widths={[480, 720, 1080]}
                     sizes="(max-width: 1000px) 90vw, 45vw"
                   />
@@ -176,7 +177,7 @@ const label = (n: number) => `Slide ${n} of ${total}`;
 <div class="btn-group presentation-back">
   <ButtonLink class="primary" href="/portfolio">
     <i class="fa-solid fa-left-long" aria-hidden="true" />
-    <span class="btn-text">View all projects</span>
+    <span class="btn-text">View All Projects</span>
   </ButtonLink>
 </div>
 

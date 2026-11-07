@@ -3,6 +3,8 @@ import { PUBLIC_PAYPAL_CLIENT_ID, PUBLIC_RECAPTCHA_SITE_KEY } from 'astro:env/cl
 import { ADD_ONS, BACKGROUNDS, CURRENCY, DEFAULT_SELECTION, REF_SHEET, SHOTS, STYLES, resolve } from '@data/commissions';
 import { FORM_ADD_ONS, IMAGE_TYPES, REQUEST_LIMITS } from '@utils/commission-form';
 import ExternalLink from './ExternalLink.astro';
+import { Image } from 'astro:assets';
+import { ReCaptcha } from '@assets';
 
 // First paint comes from the same resolve() the script and the API use.
 const initial = resolve(DEFAULT_SELECTION);
@@ -192,7 +194,12 @@ const mb = REQUEST_LIMITS.totalBytes / 1_000_000;
       <button type="button" class="btn btn-comms" data-prev>&laquo; Previous Step</button>
     </div>
 
-    <p class="recaptcha-legal">This site is protected by reCAPTCHA and the Google <ExternalLink href="https://policies.google.com/privacy">Privacy Policy</ExternalLink> and <ExternalLink href="https://policies.google.com/terms">Terms of Service</ExternalLink> apply.</p>
+    <div class="recaptcha-legal">
+      <div class="custom-recaptcha-badge__icon">
+				<Image src={ReCaptcha} alt="reCAPTCHA" title="reCAPTCHA" width={64} height={64} fetchpriority="high" />
+			</div>
+      <p>This site is protected by reCAPTCHA and the Google <ExternalLink href="https://policies.google.com/privacy">Privacy Policy</ExternalLink> and <ExternalLink href="https://policies.google.com/terms">Terms of Service</ExternalLink> apply.</p>
+    </div>
   </fieldset>
 </form>
 

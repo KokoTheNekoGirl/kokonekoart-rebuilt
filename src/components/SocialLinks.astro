@@ -57,7 +57,8 @@ const secondaryLinks = socialLinks.filter(
         ) : link.image ? (
           <Image
             src={link.image}
-            alt=""
+            alt={`${link.name} Logo`}
+            title={`${link.name} Logo`}
             aria-hidden="true"
           />
         ) : null}
