@@ -1,6 +1,6 @@
 ---
 import { getCollection, render } from 'astro:content';
-import Layout from '@layouts/Layout.astro';
+import { Layout } from '@layouts';
 import { PortfolioPresentation } from '@components';
 import { isoDate } from '@utils/last-modified';
 import { pieceHref, type PortfolioEntry } from '@utils/portfolio';
@@ -14,7 +14,7 @@ export async function getStaticPaths() {
 }
 
 const post = Astro.props as PortfolioEntry;
-const { title, description, completed } = post.data;
+const { title, description, completed, heroImage, heroAlt } = post.data;
 // Text under the frontmatter becomes the first slide's custom text.
 const hasIntro = Boolean(post.body?.trim().replace(/<!--[\s\S]*?-->/g, '').trim());
 const { Content } = await render(post);
@@ -30,7 +30,13 @@ const jsonLd = {
 };
 ---
 
-<Layout title={title} description={description}>
+<Layout
+	title={title}
+	description={description}
+	image={heroImage}
+	imageAlt={heroAlt ?? title}
+	type="article"
+>
 	<article class="page" itemscope itemtype="https://schema.org/CreativeWork">
 		<PortfolioPresentation piece={post}>
 			{hasIntro && <Content />}

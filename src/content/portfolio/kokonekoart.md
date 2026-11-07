@@ -2,7 +2,7 @@
 title: "KokoNekoArt"
 description: "I’ll walk you through the process of how I created my website and brand! It’s a long story, so bear with me while I share my entire process."
 categories: [astro-typescript, live-site]
-completed: 2026-11-11
+completed: 2026-11-07
 heroImage: "@portfolio/kokonekoart.png"
 heroAlt: "Screenshot of the rebuilt KokoNekoArt website"
 featured: true

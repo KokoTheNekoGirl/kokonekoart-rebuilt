@@ -3,7 +3,7 @@
 A hand-built portfolio and commission site for digital artist and web developer Jess (KokoNekoArt). It replaces a WordPress theme with a fast, fully static Astro site: portfolio archive, slide-style project pages, a live commission price calculator, and contact and commission forms with PayPal checkout.
 
 **Live site:** https://kokoneko.art
-**Preview:** https://kokonekoart-rebuilt.vercel.app 
+**Preview:** https://kokonekoart-rebuilt.vercel.app (when available)
 
 ## Features
 
@@ -11,7 +11,7 @@ A hand-built portfolio and commission site for digital artist and web developer 
 - **Commission calculator.** Prices live in one data file that both the calculator and the request form read, so they can never disagree.
 - **Commission request form.** Plain HTML form. The server recalculates the total from the selected options (never trusting the browser), takes the PayPal payment, then emails the request with attached reference images.
 - **Contact form.** reCAPTCHA v3, honeypot field, and HTML-escaped email notifications through Resend.
-- **Terms of Service accordion** written in MDX.
+- **Terms of Service & Privacy accordions** written in MDX.
 - **Animated home page** with Swiper sections, star background, and a respect for reduced-motion settings.
 - **Accessible by default.** Skip link, reduced-motion toggle, keyboard-operable custom checkboxes, and accessible-astro-components for the skip link and motion toggle.
 - **Performance work.** Modular SCSS with dead rules removed, a trimmed Font Awesome stylesheet, animate.css reduced to the two animations in use, and self-hosted fonts via the Astro Fonts API.
@@ -93,14 +93,14 @@ scripts/        fa-subset.mjs
 vercel.json     Headers (CSP, HSTS) and clean URLs
 ```
 
-Import aliases (`@assets`, `@components`, `@data/*`, `@layouts`, `@utils/*`, `@consts`) are defined in `tsconfig.json`.
+Import aliases (`@assets`, `@components`, `@data/*`, `@layouts/*`, `@utils/*`, `@consts`) are defined in `tsconfig.json`.
 
 ## Security notes
 
 - Prices are computed on the server, and the PayPal order is verified again before capture.
 - Uploaded images are checked by file signature and capped at 4 MB in total.
 - Secrets are server-side only; only the reCAPTCHA site key and PayPal client ID reach the browser.
-- A Content-Security-Policy runs in report-only mode from `vercel.json`.
+- A Content-Security-Policy runs from `vercel.json`.
 
 ## Credits and licences
 
