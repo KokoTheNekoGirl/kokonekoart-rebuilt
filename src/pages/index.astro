@@ -1,13 +1,7 @@
 ---
 import Layout from '@layouts/Layout.astro';
-import { Image, getImage } from 'astro:assets';
-import { Koko, KokoReduced } from '@assets';
-import { ButtonLink, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialLinks } from '@components';
+import { ButtonLink, KokoLive2D, AboutQuickInfo, SampleArtGallery, PortfolioPreview, SocialLinks } from '@components';
 
-// Koko is an animated image. With reduced motion on (OS setting or the site
-// toggle) the still KokoReduced is used instead, and the animated file is never
-// downloaded.
-const [kokoAnimated, kokoStill] = await Promise.all([getImage({ src: Koko }), getImage({ src: KokoReduced })]);
 ---
 
 <Layout>
@@ -23,19 +17,7 @@ const [kokoAnimated, kokoStill] = await Promise.all([getImage({ src: Koko }), ge
 			</div>
 		</div>
 		<div class="spacer"></div>
-		<picture class="hero-picture" data-koko>
-			<source srcset={kokoStill.src} media="(prefers-reduced-motion: reduce)" data-koko-still />
-			<img
-				src={kokoAnimated.src}
-				width={kokoAnimated.attributes.width}
-				height={kokoAnimated.attributes.height}
-				class="hero-img animate__animated animate__fadeIn"
-				alt="My fursona Koko drawing on my digital tablet."
-				loading="eager"
-				fetchpriority="high"
-				decoding="async"
-			/>
-		</picture>
+		<KokoLive2D />
 	</section>
 	<section class="about-section">
 		<div class="mini-box">
@@ -85,11 +67,3 @@ const [kokoAnimated, kokoStill] = await Promise.all([getImage({ src: Koko }), ge
 	</section>
 </Layout>
 
-<script>
-	// Keep the hero image in step with the site's reduced-motion toggle.
-	// Setting the <source> media to "all" forces the still; "not all" forces the animation.
-	const still = document.querySelector<HTMLSourceElement>('[data-koko-still]');
-	const apply = (reduced: boolean) => { if (still) still.media = reduced ? 'all' : 'not all'; };
-	apply(document.documentElement.classList.contains('reduce-motion'));
-	document.addEventListener('reducemotion:change', (e) => apply((e as CustomEvent<{ enabled: boolean }>).detail.enabled));
-</script>

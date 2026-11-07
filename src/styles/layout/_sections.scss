@@ -12,9 +12,6 @@ section {
 }
 
 .hero{
-    &-picture{
-        display: contents;
-    }
     &-section{
         margin-bottom: 100px;
         & *{

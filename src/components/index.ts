@@ -8,6 +8,7 @@ export { default as ExternalLink } from './ExternalLink.astro';
 export { default as FormattedDate } from './FormattedDate.astro';
 export { default as HeaderLink } from './HeaderLink.astro';
 export { default as IconLink } from './IconLink.astro';
+export { default as KokoLive2D } from './KokoLive2D.astro';
 export { default as PortfolioCard } from './PortfolioCard.astro';
 export { default as PortfolioPresentation } from './PortfolioPresentation.astro';
 export { default as PortfolioPreview } from './PortfolioPreview.astro';
